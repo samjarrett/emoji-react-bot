@@ -4,6 +4,7 @@ import slack
 PHRASES = [
     ("delete", "deleteprod"),
     ("check a box", "ballot_box_with_check"),
+    ("wait", "loading"),
 ]
 
 
