@@ -1,22 +1,24 @@
-import slack
 import ssl
+import slack
+
+PHRASES = [
+    ("delete", "deleteprod"),
+    ("check a box", "ballot_box_with_check"),
+]
 
 @slack.RTMClient.run_on(event='message')
 def on_message(**payload):
     data = payload['data']
     web_client = payload['web_client']
-    rtm_client = payload['rtm_client']
+    text = data.get('text', '')
 
-    if 'delete' in data.get('text', []):
-        channel_id = data['channel']
-        thread_ts = data['ts']
-        user = data['user']
-
-        web_client.reactions_add(
-            channel=data['channel'],
-            timestamp=data['ts'],
-            name="deleteprod"
-        )
+    for phrase, emoji in PHRASES:
+        if phrase in text:
+            web_client.reactions_add(
+                channel=data['channel'],
+                timestamp=data['ts'],
+                name=emoji
+            )
 
 def get_bot(token: str) -> slack.RTMClient:
     ssl_context = ssl.create_default_context()
