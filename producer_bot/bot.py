@@ -16,7 +16,7 @@ PHRASES = [
 def on_message(**payload):
     data = payload["data"]
     web_client = payload["web_client"]
-    text = data.get("text", "")
+    text = data.get("text", "").lower()
 
     for phrase, emoji in PHRASES:
         if phrase in text:
