@@ -2,8 +2,12 @@ import ssl
 import slack
 
 PHRASES = [
-    ("delete", "deleteprod"),
     ("check a box", "ballot_box_with_check"),
+    ("checks a box", "ballot_box_with_check"),
+    ("clickops", "three_button_mouse"),
+    ("click ops", "three_button_mouse"),
+    ("delete", "deleteprod"),
+    ("popcorn", "popcorn"),
     ("wait", "loading"),
 ]
 
