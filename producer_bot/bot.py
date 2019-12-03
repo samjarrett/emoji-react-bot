@@ -2,6 +2,7 @@ import ssl
 import slack
 
 PHRASES = [
+    ("buyer", "back"),
     ("check a box", "ballot_box_with_check"),
     ("checks a box", "ballot_box_with_check"),
     ("clickops", "three_button_mouse"),
