@@ -11,6 +11,7 @@ PHRASES = [
     ("does anyone", "plus1"),
     ("#experience", "man-tipping-hand"),
     ("popcorn", "popcorn"),
+    ("saddens", "facepalm"),
     ("wait", "loading"),
     ("workplace", "tr"),
 ]
