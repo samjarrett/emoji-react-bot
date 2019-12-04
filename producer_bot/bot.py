@@ -12,6 +12,7 @@ PHRASES = [
     ("#experience", "man-tipping-hand"),
     ("popcorn", "popcorn"),
     ("wait", "loading"),
+    ("workplace", "tr"),
 ]
 
 
