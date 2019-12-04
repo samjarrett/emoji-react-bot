@@ -9,6 +9,7 @@ PHRASES = [
     ("click ops", "three_button_mouse"),
     ("delete", "deleteprod"),
     ("does anyone", "plus1"),
+    ("#experience", "man-tipping-hand"),
     ("popcorn", "popcorn"),
     ("wait", "loading"),
 ]
