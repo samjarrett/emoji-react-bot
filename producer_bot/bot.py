@@ -1,18 +1,18 @@
 import ssl
 import slack
+import re
 
 PHRASES = [
-    ("buyer", "back"),
-    ("check a box", "ballot_box_with_check"),
-    ("checks a box", "ballot_box_with_check"),
-    ("clickops", "three_button_mouse"),
-    ("click ops", "three_button_mouse"),
+    ("buyers?", "back"),
+    ("(checks? a box|checking a box)", "ballot_box_with_check"),
+    ("click\s?ops", "three_button_mouse"),
     ("delete", "deleteprod"),
     ("does anyone", "plus1"),
-    ("#experience", "man-tipping-hand"),
+    ("\\#experience.*", "man-tipping-hand"),
     ("popcorn", "popcorn"),
     ("saddens", "facepalm"),
     ("wait", "loading"),
+    ("wheel", "ferris_wheel"),
     ("workplace", "tr"),
 ]
 
@@ -24,7 +24,7 @@ def on_message(**payload):
     text = data.get("text", "").lower()
 
     for phrase, emoji in PHRASES:
-        if phrase in text:
+        if re.search(phrase, text):
             web_client.reactions_add(
                 channel=data["channel"], timestamp=data["ts"], name=emoji
             )
