@@ -11,6 +11,7 @@ PHRASES = [
     ("\\#experience.*", "man-tipping-hand"),
     ("popcorn", "popcorn"),
     ("(saddens|saddened)", "facepalm"),
+    ("real\s?deal", "tm"),
     ("wait", "loading"),
     ("wheel", "ferris_wheel"),
     ("workplace", "tr"),
