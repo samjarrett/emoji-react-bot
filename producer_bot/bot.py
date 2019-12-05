@@ -10,7 +10,7 @@ PHRASES = [
     ("does anyone", "plus1"),
     ("\\#experience.*", "man-tipping-hand"),
     ("popcorn", "popcorn"),
-    ("saddens", "facepalm"),
+    ("(saddens|saddened)", "facepalm"),
     ("wait", "loading"),
     ("wheel", "ferris_wheel"),
     ("workplace", "tr"),
