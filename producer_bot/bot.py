@@ -15,6 +15,7 @@ PHRASES = [
     ("wait", "loading"),
     ("wheel", "ferris_wheel"),
     ("workplace", "tr"),
+    ("(place|house)", "house"),
 ]
 
 
