@@ -21,6 +21,7 @@ PHRASES = [
     ("under (a|the) bus", "bus"),
     ("slow", "hourglass_flowing_sand"),
     ("pizza", "pineapple"),
+    ("complicated", "man-gesturing-no"),
 ]
 
 
