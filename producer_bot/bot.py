@@ -1,6 +1,7 @@
 import ssl
 import slack
 import re
+from typing import Dict
 
 PHRASES = [
     ("buyers?", "back"),
@@ -21,9 +22,7 @@ PHRASES = [
 
 
 @slack.RTMClient.run_on(event="message")
-def on_message(**payload):
-    data = payload["data"]
-    web_client = payload["web_client"]
+def on_message(data: Dict, web_client: slack.WebClient, **kwargs):
     text = data.get("text", "").lower()
 
     for phrase, emoji in PHRASES:
@@ -31,7 +30,6 @@ def on_message(**payload):
             web_client.reactions_add(
                 channel=data["channel"], timestamp=data["ts"], name=emoji
             )
-
 
 def get_bot(token: str) -> slack.RTMClient:
     ssl_context = ssl.create_default_context()
