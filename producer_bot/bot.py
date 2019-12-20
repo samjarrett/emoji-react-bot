@@ -19,6 +19,7 @@ PHRASES = [
     ("workplace", "tr"),
     ("(place|house)", "house"),
     ("under (a|the) bus", "bus"),
+    ("slow", "hourglass_flowing_sand"),
 ]
 
 
