@@ -27,12 +27,15 @@ PHRASES = [
 
 @slack.RTMClient.run_on(event="message")
 def on_message(data: Dict, web_client: slack.WebClient, **kwargs):
-    text = data.get("text", "").lower()
+    # handle different structure of edited messages correctly
+    message = data.get("message", data)
+    text = message.get("text", "").lower()
 
     for phrase, emoji in PHRASES:
         if re.search(phrase, text):
             web_client.reactions_add(
-                channel=data["channel"], timestamp=data["ts"], name=emoji
+                channel=data["channel"], timestamp=message["ts"], name=emoji
+            )
             )
 
 def get_bot(token: str) -> slack.RTMClient:
