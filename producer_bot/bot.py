@@ -1,3 +1,4 @@
+from random import randint
 import ssl
 import slack
 import re
@@ -24,6 +25,28 @@ PHRASES = [
     ("complicated", "man-gesturing-no"),
 ]
 
+DICE_REACTIONS = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+]
+
+
+def num2word(num: int):
+    num = str(num)
+    i = 0
+    while i < len(num):
+        character = int(num[i])
+        yield DICE_REACTIONS[character]
+        i += 1
+
 
 @slack.RTMClient.run_on(event="message")
 def on_message(data: Dict, web_client: slack.WebClient, **kwargs):
@@ -36,7 +59,19 @@ def on_message(data: Dict, web_client: slack.WebClient, **kwargs):
             web_client.reactions_add(
                 channel=data["channel"], timestamp=message["ts"], name=emoji
             )
+
+    if "dice" in text:
+        roll = randint(1, 20)
+        emojis = num2word(roll)
+
+        if roll == 11:  # handle duplicate emoji reaction
+            emojis = ["one", "one-again"]
+
+        for emoji in emojis:
+            web_client.reactions_add(
+                channel=data["channel"], timestamp=message["ts"], name=emoji
             )
+
 
 def get_bot(token: str) -> slack.RTMClient:
     ssl_context = ssl.create_default_context()
