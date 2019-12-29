@@ -1,28 +1,28 @@
 from random import randint
-import ssl
-import slack
 import re
+import ssl
 from typing import Dict
+import slack
 
 PHRASES = [
-    ("buyers?", "back"),
-    ("(checks? a box|checking a box)", "ballot_box_with_check"),
-    ("click\s?ops", "three_button_mouse"),
-    ("delete", "deleteprod"),
-    ("does anyone", "plus1"),
-    ("\\#experience.*", "man-tipping-hand"),
-    ("(popcorn|tea)", "popcorn"),
-    ("popcorn", "tea"),
-    ("(saddens|saddened)", "facepalm"),
-    ("real\s?deal", "tm"),
-    ("wait", "loading"),
-    ("wheel", "ferris_wheel"),
-    ("workplace", "tr"),
-    ("(place|house)", "house"),
-    ("under (a|the) bus", "bus"),
-    ("slow", "hourglass_flowing_sand"),
-    ("pizza", "pineapple"),
-    ("complicated", "man-gesturing-no"),
+    (r"buyers?", "back"),
+    (r"(checks? a box|checking a box)", "ballot_box_with_check"),
+    (r"click\s?ops", "three_button_mouse"),
+    (r"delete", "deleteprod"),
+    (r"does anyone", "plus1"),
+    (r"\#experience.*", "man-tipping-hand"),
+    (r"(popcorn|tea)", "popcorn"),
+    (r"popcorn", "tea"),
+    (r"(saddens|saddened)", "facepalm"),
+    (r"real\s?deal", "tm"),
+    (r"wait", "loading"),
+    (r"wheel", "ferris_wheel"),
+    (r"workplace", "tr"),
+    (r"(place|house)", "house"),
+    (r"under (a|the) bus", "bus"),
+    (r"slow", "hourglass_flowing_sand"),
+    (r"pizza", "pineapple"),
+    (r"complicated", "man-gesturing-no"),
 ]
 
 DICE_REACTIONS = [
@@ -49,7 +49,9 @@ def num2word(num: int):
 
 
 @slack.RTMClient.run_on(event="message")
-def on_message(data: Dict, web_client: slack.WebClient, **kwargs):
+def on_message(
+    data: Dict, web_client: slack.WebClient, **kwargs
+):  # pylint: disable=unused-argument
     # handle different structure of edited messages correctly
     message = data.get("message", data)
     text = message.get("text", "").lower()
