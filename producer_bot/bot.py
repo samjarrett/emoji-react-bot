@@ -23,6 +23,7 @@ PHRASES = [
     (r"slow", "hourglass_flowing_sand"),
     (r"pizza", "pineapple"),
     (r"complicated", "man-gesturing-no"),
+    (r"(honk|g[oe]{2}se)", "honk"),
 ]
 
 DICE_REACTIONS = [
