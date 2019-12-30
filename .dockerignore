@@ -7,3 +7,4 @@ dev-requirements.txt
 Dockerfile
 requirements.in
 .dockerignore
+hooks

@@ -1,8 +1,13 @@
 from random import randint
+import os
 import re
 import ssl
 from typing import Dict
 import slack
+from .version import get_version
+
+DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
+BOT_VERSION = get_version()
 
 PHRASES = [
     (r"buyers?", "back"),
@@ -48,6 +53,20 @@ def num2word(num: int):
         yield DICE_REACTIONS[character]
         i += 1
 
+
+@slack.RTMClient.run_on(event="hello")
+def on_hello(data: Dict, web_client: slack.WebClient, **kwargs):  # pylint: disable=unused-argument
+    if not DEBUG_CHANNEL:
+        return
+
+    web_client.chat_postMessage(channel=DEBUG_CHANNEL, text=f":robot_face: Bot version {BOT_VERSION} now connected :tada:")
+
+@slack.RTMClient.run_on(event="goodbye")
+def on_goodbye(data: Dict, web_client: slack.WebClient, **kwargs):  # pylint: disable=unused-argument
+    if not DEBUG_CHANNEL:
+        return
+
+    web_client.chat_postMessage(channel=DEBUG_CHANNEL, text=f":robot_face: Bot version {BOT_VERSION} requested to disconnect by server")
 
 @slack.RTMClient.run_on(event="message")
 def on_message(
