@@ -55,18 +55,30 @@ def num2word(num: int):
 
 
 @slack.RTMClient.run_on(event="hello")
-def on_hello(data: Dict, web_client: slack.WebClient, **kwargs):  # pylint: disable=unused-argument
+def on_hello(
+    data: Dict, web_client: slack.WebClient, **kwargs
+):  # pylint: disable=unused-argument
     if not DEBUG_CHANNEL:
         return
 
-    web_client.chat_postMessage(channel=DEBUG_CHANNEL, text=f":robot_face: Bot version {BOT_VERSION} now connected :tada:")
+    web_client.chat_postMessage(
+        channel=DEBUG_CHANNEL,
+        text=f":robot_face: Bot version {BOT_VERSION} now connected :tada:",
+    )
+
 
 @slack.RTMClient.run_on(event="goodbye")
-def on_goodbye(data: Dict, web_client: slack.WebClient, **kwargs):  # pylint: disable=unused-argument
+def on_goodbye(
+    data: Dict, web_client: slack.WebClient, **kwargs
+):  # pylint: disable=unused-argument
     if not DEBUG_CHANNEL:
         return
 
-    web_client.chat_postMessage(channel=DEBUG_CHANNEL, text=f":robot_face: Bot version {BOT_VERSION} requested to disconnect by server")
+    web_client.chat_postMessage(
+        channel=DEBUG_CHANNEL,
+        text=f":robot_face: Bot version {BOT_VERSION} requested to disconnect by server",
+    )
+
 
 @slack.RTMClient.run_on(event="message")
 def on_message(
