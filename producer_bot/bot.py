@@ -142,12 +142,15 @@ def on_emoji_changed(
 
     verb = EMOJI_VERBIAGE.get(data["subtype"], data["subtype"])
 
+    if "alias:" in data.get("value", ""):
+        verb = f"alias {verb}"
+
     # create a string of the affected emojis comma separated until the penultimate, and then and'ed
     emoji_names = [f":{emoji}:" for emoji in data.get("names", [data.get("name")])]
     emojis = ", ".join(emoji_names)
 
     web_client.chat_postMessage(
-        channel=DEBUG_CHANNEL, text=f":robot_face: Emojis {verb}: {emojis}",
+        channel=DEBUG_CHANNEL, text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis}",
     )
 
 
