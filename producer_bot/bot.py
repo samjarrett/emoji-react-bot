@@ -150,7 +150,7 @@ def on_emoji_changed(
     emojis = ", ".join(emoji_names)
 
     web_client.chat_postMessage(
-        channel=DEBUG_CHANNEL, text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis}",
+        channel=DEBUG_CHANNEL, text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis})",
     )
 
 
