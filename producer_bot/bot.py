@@ -2,10 +2,14 @@ from random import randint
 import os
 import re
 import ssl
-from copy import deepcopy
 from typing import Dict
 import slack
 from .version import get_version
+from .slack_helper import (
+    event_item_to_reactions_api,
+    get_bot_user_id,
+    get_bot_reactions,
+)
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
 BOT_VERSION = get_version()
@@ -47,6 +51,11 @@ DICE_REACTIONS = [
     "nine",
 ]
 
+EMOJI_VERBIAGE = {
+    "add": "added",
+    "remove": "removed",
+}
+
 
 def num2word(num: int):
     num = str(num)
@@ -55,28 +64,6 @@ def num2word(num: int):
         character = int(num[i])
         yield DICE_REACTIONS[character]
         i += 1
-
-
-def __event_item_to_reactions_api(item: Dict) -> Dict:
-    reaction = deepcopy(item)
-    reaction["timestamp"] = reaction.pop("ts")
-    item_type = reaction.pop("type")
-
-    return reaction, item_type
-
-
-def __get_bot_user_id(web_client: slack.WebClient) -> str:
-    return web_client.auth_test().get("user_id")
-
-
-def __get_bot_reactions(
-    web_client: slack.WebClient, bot_user_id: str, item_type: str, item: Dict
-):
-    reaction_response = web_client.reactions_get(**item)
-
-    reactions = reaction_response.get(item_type).get("reactions")
-
-    return filter(lambda reaction: bot_user_id in reaction.get("users", []), reactions)
 
 
 @slack.RTMClient.run_on(event="hello")
@@ -137,15 +124,31 @@ def on_reaction_added(
     data: Dict, web_client: slack.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     if data["reaction"] == BACKTRACK_EMOJI:
-        reactions_item, item_type = __event_item_to_reactions_api(data["item"])
-        bot_id = __get_bot_user_id(web_client)
+        reactions_item, item_type = event_item_to_reactions_api(data["item"])
+        bot_id = get_bot_user_id(web_client)
 
-        bot_reactions = __get_bot_reactions(
-            web_client, bot_id, item_type, reactions_item
-        )
+        bot_reactions = get_bot_reactions(web_client, bot_id, item_type, reactions_item)
 
         for reaction in bot_reactions:
             web_client.reactions_remove(name=reaction.get("name"), **reactions_item)
+
+
+@slack.RTMClient.run_on(event="emoji_changed")
+def on_emoji_changed(
+    data: Dict, web_client: slack.WebClient, **kwargs
+):  # pylint: disable=unused-argument
+    if not DEBUG_CHANNEL:
+        return
+
+    verb = EMOJI_VERBIAGE.get(data["subtype"], data["subtype"])
+
+    # create a string of the affected emojis comma separated until the penultimate, and then and'ed
+    emoji_names = [f":{emoji}:" for emoji in data.get("names", [data.get("name")])]
+    emojis = ", ".join(emoji_names)
+
+    web_client.chat_postMessage(
+        channel=DEBUG_CHANNEL, text=f":robot_face: Emojis {verb}: {emojis}",
+    )
 
 
 def get_bot(token: str) -> slack.RTMClient:
