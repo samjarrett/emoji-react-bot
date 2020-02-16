@@ -1,3 +1,4 @@
+import logging
 from random import randint
 import os
 import re
@@ -56,6 +57,11 @@ EMOJI_VERBIAGE = {
     "remove": "removed",
 }
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s  %(module)s:%(funcName)s %(message)s",
+)
+
 
 def num2word(num: int):
     num = str(num)
@@ -67,28 +73,14 @@ def num2word(num: int):
 
 
 @slack.RTMClient.run_on(event="hello")
-def on_hello(
-    data: Dict, web_client: slack.WebClient, **kwargs
-):  # pylint: disable=unused-argument
-    if not DEBUG_CHANNEL:
-        return
-
-    web_client.chat_postMessage(
-        channel=DEBUG_CHANNEL,
-        text=f":robot_face: Bot version {BOT_VERSION} now connected :tada:",
-    )
+def on_hello(**kwargs):  # pylint: disable=unused-argument
+    logging.info("Bot connected to the server")
 
 
 @slack.RTMClient.run_on(event="goodbye")
-def on_goodbye(
-    data: Dict, web_client: slack.WebClient, **kwargs
-):  # pylint: disable=unused-argument
-    if not DEBUG_CHANNEL:
-        return
-
-    web_client.chat_postMessage(
-        channel=DEBUG_CHANNEL,
-        text=f":robot_face: Bot version {BOT_VERSION} requested to disconnect by server",
+def on_goodbye(**kwargs):  # pylint: disable=unused-argument
+    logging.info(
+        "Server requested the bot disconnect - will automatically reconnect shortly"
     )
 
 
