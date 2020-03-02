@@ -8,7 +8,7 @@ aiohttp==3.6.2            # via slackclient
 async-timeout==3.0.1      # via aiohttp
 attrs==19.3.0             # via aiohttp
 chardet==3.0.4            # via aiohttp
-idna==2.8                 # via yarl
-multidict==4.7.4          # via aiohttp, yarl
-slackclient==2.5.0
+idna==2.9                 # via yarl
+multidict==4.7.5          # via aiohttp, yarl
+slackclient==2.5.0        # via -r requirements.in
 yarl==1.4.2               # via aiohttp
