@@ -37,6 +37,10 @@ PHRASES = [
     (r"pizza", "pineapple"),
     (r"complicated", "man-gesturing-no"),
     (r"(honk|g[oe]{2}se)", "honk"),
+    (
+        r"(tp|(toilet|bog)\s?(paper|roll)|corona\s?virus|covid)",
+        ["toilet-paper", "shopping_trolley"],
+    ),
 ]
 
 DICE_REACTIONS = [
@@ -92,11 +96,15 @@ def on_message(
     message = data.get("message", data)
     text = message.get("text", "").lower()
 
-    for phrase, emoji in PHRASES:
+    for phrase, emoji_to_add in PHRASES:
         if re.search(phrase, text):
-            web_client.reactions_add(
-                channel=data["channel"], timestamp=message["ts"], name=emoji
-            )
+            if not isinstance(emoji_to_add, list):
+                emoji_to_add = [emoji_to_add]
+
+            for emoji in emoji_to_add:
+                web_client.reactions_add(
+                    channel=data["channel"], timestamp=message["ts"], name=emoji
+                )
 
     if "dice" in text:
         roll = randint(1, 20)
