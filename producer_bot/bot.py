@@ -38,7 +38,7 @@ PHRASES = [
     (r"complicated", "man-gesturing-no"),
     (r"(honk|g[oe]{2}se)", "honk"),
     (
-        r"(tp|(toilet|bog)\s?(paper|roll)|corona\s?virus|covid)",
+        r"(\btp\b|(toilet|bog)\s?(paper|roll)|corona\s?virus|covid)",
         ["toilet-paper", "shopping_trolley"],
     ),
 ]
