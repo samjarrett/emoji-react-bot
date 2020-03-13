@@ -1,3 +1,4 @@
+from collections import namedtuple
 import logging
 from random import randint
 import os
@@ -37,11 +38,19 @@ PHRASES = [
     (r"pizza", "pineapple"),
     (r"complicated", "man-gesturing-no"),
     (r"(honk|g[oe]{2}se)", "honk"),
-    (
-        r"(\btp\b|(toilet|bog)\s?(paper|roll)|corona\s?virus|covid)",
-        ["toilet-paper", "shopping_trolley"],
-    ),
+    (r"(\btp\b|(toilet|bog)\s?(paper|roll))", ["toilet-paper", "shopping_trolley"],),
 ]
+
+RepostablePhrase = namedtuple("RepostablePhrase", "match channel description emoji")
+
+REPOST_PHRASES = {
+    RepostablePhrase(
+        match=r"corona\s?virus|covid|quarantine|isolat(ion|e)",
+        channel="CUZJRJ42E",
+        description="the COVID-19 pandemic",
+        emoji=":mask-parrot:",
+    )
+}
 
 DICE_REACTIONS = [
     "zero",
@@ -105,6 +114,29 @@ def on_message(
                 web_client.reactions_add(
                     channel=data["channel"], timestamp=message["ts"], name=emoji
                 )
+
+    for phrase in REPOST_PHRASES:
+        if re.search(phrase.match, text):
+            permalink = web_client.chat_getPermalink(
+                channel=data["channel"], message_ts=message["ts"]
+            ).data["permalink"]
+
+            posted_message = web_client.chat_postMessage(
+                channel=phrase.channel,
+                text=f"{phrase.emoji} {permalink}",
+                unfurl_links=True,
+            )
+            posted_permalink = web_client.chat_getPermalink(
+                channel=posted_message.data["channel"],
+                message_ts=posted_message.data["ts"],
+            ).data["permalink"]
+            web_client.chat_postEphemeral(
+                channel=data["channel"],
+                user=data["user"],
+                text=f"{phrase.emoji} hey <@{data['user']}>, since <{permalink}|your message> was about "
+                f"*{phrase.description}*, I went ahead and <{posted_permalink}|reposted it> to <#{phrase.channel}> "
+                f"for you.",
+            )
 
     if "dice" in text:
         roll = randint(1, 20)
