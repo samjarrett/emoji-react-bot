@@ -58,7 +58,7 @@ def on_message(
 
     try:
         user = data.get("user")
-        if user:
+        if user and channel.startswith("C"):
             reposter.trigger(channel, timestamp, data.get("user"), text, web_client)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)
