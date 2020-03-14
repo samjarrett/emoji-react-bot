@@ -83,6 +83,19 @@ def on_reaction_added(
         for reaction in bot_reactions:
             web_client.reactions_remove(name=reaction.get("name"), **reactions_item)
 
+    if data["reaction"] in reposter.WATCH_EMOJIS:
+        phrase = reposter.WATCH_EMOJIS.get(data["reaction"])
+        permalink = reposter.repost(
+            data["item"]["channel"], data["item"]["ts"], phrase, web_client
+        )
+        message = (
+            f":{phrase.emoji}: hey <@{data['user']}>, since your message was about *{phrase.description}*, "
+            f"I went ahead and <{permalink}|reposted it> to <#{phrase.channel}> for you."
+        )
+        web_client.chat_postEphemeral(
+            channel=data["item"]["channel"], user=data["user"], text=message
+        )
+
 
 @slack.RTMClient.run_on(event="emoji_changed")
 def on_emoji_changed(
