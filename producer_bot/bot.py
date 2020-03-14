@@ -1,70 +1,20 @@
-from collections import namedtuple
 import logging
-from random import randint
 import os
-import re
 import ssl
 from typing import Dict
 import slack
-from .version import get_version
 from .slack_helper import (
     event_item_to_reactions_api,
     get_bot_user_id,
     get_bot_reactions,
 )
+from . import triggered_reactions
+from . import dice_roller
+from . import reposter
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
-BOT_VERSION = get_version()
 
 BACKTRACK_EMOJI = "no_entry_sign"
-
-PHRASES = [
-    (r"buyers?", "back"),
-    (r"(checks? a box|checking a box)", "ballot_box_with_check"),
-    (r"click\s?ops", "three_button_mouse"),
-    (r"delete", "deleteprod"),
-    (r"does anyone", "plus1"),
-    (r"\#experience.*", "man-tipping-hand"),
-    (r"(popcorn|tea)", "popcorn"),
-    (r"popcorn", "tea"),
-    (r"(saddens|saddened)", "facepalm"),
-    (r"real\s?deal", "tm"),
-    (r"wait", "loading"),
-    (r"wheel", "ferris_wheel"),
-    (r"workplace", "tr"),
-    (r"(place|house)", "house"),
-    (r"under (a|the) bus", "bus"),
-    (r"slow", "hourglass_flowing_sand"),
-    (r"pizza", "pineapple"),
-    (r"complicated", "man-gesturing-no"),
-    (r"(honk|g[oe]{2}se)", "honk"),
-    (r"(\btp\b|(toilet|bog)\s?(paper|roll))", ["toilet-paper", "shopping_trolley"],),
-]
-
-RepostablePhrase = namedtuple("RepostablePhrase", "match channel description emoji")
-
-REPOST_PHRASES = {
-    RepostablePhrase(
-        match=r"corona\s?virus|covid|quarantine|isolat(ion|e)",
-        channel="CUZJRJ42E",
-        description="the COVID-19 pandemic",
-        emoji=":mask-parrot:",
-    )
-}
-
-DICE_REACTIONS = [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-]
-
 EMOJI_VERBIAGE = {
     "add": "added",
     "remove": "removed",
@@ -74,15 +24,6 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s  %(module)s:%(funcName)s %(message)s",
 )
-
-
-def num2word(num: int):
-    num = str(num)
-    i = 0
-    while i < len(num):
-        character = int(num[i])
-        yield DICE_REACTIONS[character]
-        i += 1
 
 
 @slack.RTMClient.run_on(event="hello")
@@ -102,53 +43,31 @@ def on_message(
     data: Dict, web_client: slack.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     # handle different structure of edited messages correctly
-    message = data.get("message", data)
-    text = message.get("text", "").lower()
+    if data.get("subtype") == "message_replied":
+        logging.debug("Skipping event as it's a message_replied event")
+        return
 
-    for phrase, emoji_to_add in PHRASES:
-        if re.search(phrase, text):
-            if not isinstance(emoji_to_add, list):
-                emoji_to_add = [emoji_to_add]
+    text = data.get("text", "").lower()
+    channel = data["channel"]
+    timestamp = data["ts"]
 
-            for emoji in emoji_to_add:
-                web_client.reactions_add(
-                    channel=data["channel"], timestamp=message["ts"], name=emoji
-                )
+    try:
+        triggered_reactions.handle_message(channel, timestamp, text, web_client)
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
 
-    for phrase in REPOST_PHRASES:
-        if re.search(phrase.match, text):
-            permalink = web_client.chat_getPermalink(
-                channel=data["channel"], message_ts=message["ts"]
-            ).data["permalink"]
-
-            posted_message = web_client.chat_postMessage(
-                channel=phrase.channel,
-                text=f"{phrase.emoji} {permalink}",
-                unfurl_links=True,
-            )
-            posted_permalink = web_client.chat_getPermalink(
-                channel=posted_message.data["channel"],
-                message_ts=posted_message.data["ts"],
-            ).data["permalink"]
-            web_client.chat_postEphemeral(
-                channel=data["channel"],
-                user=data["user"],
-                text=f"{phrase.emoji} hey <@{data['user']}>, since <{permalink}|your message> was about "
-                f"*{phrase.description}*, I went ahead and <{posted_permalink}|reposted it> to <#{phrase.channel}> "
-                f"for you.",
-            )
+    try:
+        user = data.get("user")
+        if user:
+            reposter.trigger(channel, timestamp, data.get("user"), text, web_client)
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
 
     if "dice" in text:
-        roll = randint(1, 20)
-        emojis = num2word(roll)
-
-        if roll == 11:  # handle duplicate emoji reaction
-            emojis = ["one", "one-again"]
-
-        for emoji in emojis:
-            web_client.reactions_add(
-                channel=data["channel"], timestamp=message["ts"], name=emoji
-            )
+        try:
+            dice_roller.roll(channel, timestamp, web_client)
+        except slack.errors.SlackApiError as exception:
+            logging.error(exception)
 
 
 @slack.RTMClient.run_on(event="reaction_added")
