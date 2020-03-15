@@ -17,9 +17,22 @@ def get_bot_user_id(web_client: slack.WebClient) -> str:
     return __cached_get_bot_user_id(BlackBox(web_client))
 
 
+def is_channel_private(channel: str, web_client: slack.WebClient) -> bool:
+    return __cached_is_channel_private(channel, BlackBox(web_client))
+
+
 @lru_cache(maxsize=None)
 def __cached_get_bot_user_id(web_client: BlackBox) -> str:
     return web_client.contents.auth_test().get("user_id")
+
+
+@lru_cache(maxsize=None)
+def __cached_is_channel_private(channel: str, web_client: BlackBox) -> str:
+    return (
+        web_client.contents.conversations_info(channel=channel)
+        .get("channel", {})
+        .get("is_private", True)
+    )
 
 
 def get_bot_reactions(

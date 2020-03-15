@@ -6,6 +6,7 @@ import slack
 from .slack_helper import (
     event_item_to_reactions_api,
     get_bot_user_id,
+    is_channel_private,
     get_bot_reactions,
 )
 from . import triggered_reactions
@@ -58,7 +59,7 @@ def on_message(
 
     try:
         user = data.get("user")
-        if user and channel.startswith("C"):
+        if user and not is_channel_private(channel, web_client):
             reposter.trigger(channel, timestamp, data.get("user"), text, web_client)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)
