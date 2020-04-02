@@ -9,7 +9,7 @@ PHRASES = [
     (r"delete", "deleteprod"),
     (r"does anyone", "plus1"),
     (r"\#experience.*", "man-tipping-hand"),
-    (r"(popcorn|tea)", "popcorn"),
+    (r"\b(popcorn|tea|team)\b", "popcorn"),
     (r"popcorn", "tea"),
     (r"(saddens|saddened)", "facepalm"),
     (r"real\s?deal", "tm"),

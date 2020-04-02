@@ -11,7 +11,7 @@ async-timeout==3.0.1      # via -r requirements.txt, aiohttp
 attrs==19.3.0             # via -r requirements.txt, aiohttp, black
 black==19.10b0            # via -r dev-requirements.in
 chardet==3.0.4            # via -r requirements.txt, aiohttp
-click==7.0                # via black
+click==7.1.1              # via black
 idna==2.9                 # via -r requirements.txt, yarl
 isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
