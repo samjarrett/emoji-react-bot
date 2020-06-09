@@ -23,6 +23,8 @@ PHRASES = [
     (r"complicated", "man-gesturing-no"),
     (r"(honk|g[oe]{2}se)", "honk"),
     (r"(\btp\b|(toilet|bog)\s?(paper|roll))", ["toilet-paper", "shopping_trolley"],),
+    (r"animal crossing", "animal-crossing"),
+    (r"\bnook\b", "nook"),
 ]
 
 
