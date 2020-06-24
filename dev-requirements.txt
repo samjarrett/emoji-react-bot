@@ -21,7 +21,7 @@ pathspec==0.7.0           # via black
 pylint==2.5.3             # via -r dev-requirements.in
 regex==2020.2.20          # via black
 six==1.14.0               # via astroid
-slackclient==2.7.1        # via -r requirements.txt
+slackclient==2.7.2        # via -r requirements.txt
 toml==0.10.0              # via black, pylint
 typed-ast==1.4.1          # via black
 wrapt==1.11.2             # via astroid
