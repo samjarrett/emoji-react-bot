@@ -12,6 +12,7 @@ from .slack_helper import (
 from . import triggered_reactions
 from . import dice_roller
 from . import reposter
+from . import corrector
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
 
@@ -69,6 +70,11 @@ def on_message(
             dice_roller.roll(channel, timestamp, web_client)
         except slack.errors.SlackApiError as exception:
             logging.error(exception)
+
+    try:
+        corrector.trigger(channel, timestamp, data.get("user"), text, web_client)
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
 
 
 @slack.RTMClient.run_on(event="reaction_added")
