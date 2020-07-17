@@ -13,14 +13,18 @@ from . import triggered_reactions
 from . import dice_roller
 from . import reposter
 from . import corrector
+from .parrot import Parrot
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
+ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL")
 
 BACKTRACK_EMOJI = "no_entry_sign"
 EMOJI_VERBIAGE = {
     "add": "added",
     "remove": "removed",
 }
+
+PARROT = Parrot(ADMIN_DEBUG_CHANNEL)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,6 +56,7 @@ def on_message(
     text = data.get("text", "").lower()
     channel = data["channel"]
     timestamp = data["ts"]
+    user = data.get("user", "")
 
     try:
         triggered_reactions.handle_message(channel, timestamp, text, web_client)
@@ -59,9 +64,8 @@ def on_message(
         logging.error(exception)
 
     try:
-        user = data.get("user")
         if user and not is_channel_private(channel, web_client):
-            reposter.trigger(channel, timestamp, data.get("user"), text, web_client)
+            reposter.trigger(channel, timestamp, user, text, web_client)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)
 
@@ -72,7 +76,12 @@ def on_message(
             logging.error(exception)
 
     try:
-        corrector.trigger(channel, timestamp, data.get("user"), text, web_client)
+        corrector.trigger(channel, timestamp, user, text, web_client)
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
+
+    try:
+        PARROT.on_message(web_client, text, channel, timestamp, user)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)
 
@@ -90,8 +99,8 @@ def on_reaction_added(
         for reaction in bot_reactions:
             web_client.reactions_remove(name=reaction.get("name"), **reactions_item)
 
-    if data["reaction"] in reposter.WATCH_EMOJIS:
-        phrase = reposter.WATCH_EMOJIS.get(data["reaction"])
+    phrase = reposter.WATCH_EMOJIS.get(data["reaction"])
+    if phrase:
         permalink = reposter.repost(
             data["item"]["channel"], data["item"]["ts"], phrase, web_client
         )
@@ -102,6 +111,43 @@ def on_reaction_added(
         web_client.chat_postEphemeral(
             channel=data["item"]["channel"], user=data["user"], text=message
         )
+
+    try:
+        PARROT.on_reaction_added(
+            web_client,
+            data["reaction"],
+            data["item"]["channel"],
+            data["item"]["ts"],
+            data["user"],
+        )
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
+
+
+@slack.RTMClient.run_on(event="reaction_removed")
+def on_reaction_removed(
+    data: Dict, web_client: slack.WebClient, **kwargs
+):  # pylint: disable=unused-argument
+    try:
+        PARROT.on_reaction_removed(
+            web_client,
+            data["reaction"],
+            data["item"]["channel"],
+            data["item"]["ts"],
+            data["user"],
+        )
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
+
+
+@slack.RTMClient.run_on(event="user_typing")
+async def on_user_typing(
+    data: Dict, rtm_client: slack.RTMClient, **kwargs
+):  # pylint: disable=unused-argument
+    try:
+        await PARROT.on_user_typing(rtm_client, data["channel"], data["user"])
+    except slack.errors.SlackApiError as exception:
+        logging.error(exception)
 
 
 @slack.RTMClient.run_on(event="emoji_changed")

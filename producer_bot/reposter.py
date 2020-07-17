@@ -1,3 +1,4 @@
+from typing import Dict
 from collections import namedtuple
 import re
 
@@ -18,7 +19,9 @@ REPOST_PHRASES = frozenset(
     }
 )
 
-WATCH_EMOJIS = {phrase.emoji: phrase for phrase in REPOST_PHRASES}
+WATCH_EMOJIS: Dict[str, RepostablePhrase] = {
+    phrase.emoji: phrase for phrase in REPOST_PHRASES
+}
 
 
 def repost(
@@ -39,7 +42,7 @@ def repost(
     ).data["permalink"]
 
 
-def trigger(channel: str, timestamp: int, user: str, text: str, web_client: WebClient):
+def trigger(channel: str, timestamp: str, user: str, text: str, web_client: WebClient):
     for phrase in REPOST_PHRASES:
         if phrase.channel == channel:
             continue  # don't try and repost in the same channel
