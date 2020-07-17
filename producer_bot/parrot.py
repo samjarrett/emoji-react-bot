@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+import re
 
 import slack
 
@@ -29,6 +30,11 @@ class Parrot:
             )
         LOGGER.info(message)
 
+    def parrot(self, web_client: slack.WebClient, user: str):
+        """Parrot a new user"""
+        self.write_log_entry(web_client, f"Now parroting <@{user}>")
+        self.user = user
+
     def on_message(
         self,
         web_client: slack.WebClient,
@@ -43,8 +49,7 @@ class Parrot:
 
         for emoji in TRIGGERED_EMOJI:
             if f":{emoji}:" in text and user != self.user:
-                self.write_log_entry(web_client, f"Now parroting <@{user}>")
-                self.user = user
+                self.parrot(web_client, user)
                 break
 
     def on_app_mention(
@@ -56,17 +61,17 @@ class Parrot:
         user: str,
     ):
         """Handle mentions"""
-        if not self.user:
-            web_client.chat_postMessage(
-                channel=channel,
-                thread_ts=timestamp,
-                text=f"<@{user}> I'm sorry but I'm not quite sure what you're talking about?",
-            )
-            return
-
         phrases = {"quit it", "cut it out", "cut that out", "stop it", "enough"}
         for phrase in phrases:
             if phrase in text:
+                if not self.user:
+                    web_client.chat_postMessage(
+                        channel=channel,
+                        thread_ts=timestamp,
+                        text=f"<@{user}> I'm sorry but I'm not quite sure what you're talking about?",
+                    )
+                    return
+
                 self.user = None
                 self.write_log_entry(
                     web_client, f"No longer parroting <@{user}> :pouting_cat:"
@@ -77,6 +82,11 @@ class Parrot:
                     text=f"<@{user}> OK. :pouting_cat:",
                 )
                 break
+
+        if channel == self.debug_channel:
+            match = re.search(r"parrot \<\@([a-z0-9]+)\>", text)
+            if match:
+                self.parrot(web_client, match[1].upper())
 
     def on_reaction_added(
         self,
@@ -93,8 +103,7 @@ class Parrot:
 
         for check_emoji in TRIGGERED_EMOJI:
             if emoji == check_emoji and user != self.user:
-                self.write_log_entry(web_client, f"Now parroting <@{user}>")
-                self.user = user
+                self.parrot(web_client, user)
                 return  # don't parrot the parrot emoji itself
 
         if user != self.user:
