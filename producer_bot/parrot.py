@@ -42,6 +42,37 @@ class Parrot:
             self.write_log_entry(web_client, f"Now parroting <@{user}>")
             self.user = user
 
+    def on_app_mention(
+        self,
+        web_client: slack.WebClient,
+        text: str,
+        channel: str,
+        timestamp: str,
+        user: str,
+    ):
+        """Handle mentions"""
+        if not self.user:
+            web_client.chat_postMessage(
+                channel=channel,
+                thread_ts=timestamp,
+                text=f"<@{user}> I'm sorry but I'm not quite sure what you're talking about?",
+            )
+            return
+
+        phrases = {"quit it", "cut it out", "cut that out", "stop it", "enough"}
+        for phrase in phrases:
+            if phrase in text:
+                self.user = None
+                self.write_log_entry(
+                    web_client, f"No longer parroting <@{user}> :pouting_cat:"
+                )
+                web_client.chat_postMessage(
+                    channel=channel,
+                    thread_ts=timestamp,
+                    text=f"<@{user}> OK. :pouting_cat:",
+                )
+                break
+
     def on_reaction_added(
         self,
         web_client: slack.WebClient,
