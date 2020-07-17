@@ -82,9 +82,10 @@ def on_message(
 
     try:
         bot_user_id = get_bot_user_id(web_client).lower()
-        if f"<@{bot_user_id}>" in text:
-            PARROT.on_app_mention(web_client, text, channel, timestamp, user)
-        PARROT.on_message(web_client, text, channel, timestamp, user)
+        if "bot_id" not in data:  # don't trigger on bots
+            if f"<@{bot_user_id}>" in text:
+                PARROT.on_app_mention(web_client, text, channel, timestamp, user)
+            PARROT.on_message(web_client, text, channel, timestamp, user)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)
 
