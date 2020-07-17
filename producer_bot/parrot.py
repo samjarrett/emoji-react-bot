@@ -5,7 +5,7 @@ import slack
 
 from .slack_helper import is_user_a_bot
 
-TRIGGERED_EMOJI: str = "rip"
+TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave"}
 
 LOGGER = logging.getLogger(__name__)
 
@@ -38,9 +38,14 @@ class Parrot:
         user: str,
     ):
         """Handle messages"""
-        if f":{TRIGGERED_EMOJI}:" in text and not is_user_a_bot(web_client, user):
-            self.write_log_entry(web_client, f"Now parroting <@{user}>")
-            self.user = user
+        if is_user_a_bot(web_client, user):
+            return
+
+        for emoji in TRIGGERED_EMOJI:
+            if f":{emoji}:" in text and user != self.user:
+                self.write_log_entry(web_client, f"Now parroting <@{user}>")
+                self.user = user
+                break
 
     def on_app_mention(
         self,
@@ -83,10 +88,14 @@ class Parrot:
     ):
         """Handle reactions added"""
         # Don't parrot bots
-        if emoji == TRIGGERED_EMOJI and not is_user_a_bot(web_client, user):
-            self.write_log_entry(web_client, f"Now parroting <@{user}>")
-            self.user = user
-            return  # don't parrot the parrot emoji itself
+        if is_user_a_bot(web_client, user):
+            return
+
+        for check_emoji in TRIGGERED_EMOJI:
+            if emoji == check_emoji and user != self.user:
+                self.write_log_entry(web_client, f"Now parroting <@{user}>")
+                self.user = user
+                return  # don't parrot the parrot emoji itself
 
         if user != self.user:
             return
