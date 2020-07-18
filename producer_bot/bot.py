@@ -7,6 +7,7 @@ from .slack_helper import (
     event_item_to_reactions_api,
     get_bot_user_id,
     is_channel_private,
+    is_channel_im,
     get_bot_reactions,
 )
 from . import triggered_reactions
@@ -81,9 +82,11 @@ def on_message(
         logging.error(exception)
 
     try:
-        bot_user_id = get_bot_user_id(web_client).lower()
         if "bot_id" not in data:  # don't trigger on bots
-            if text.startswith(f"<@{bot_user_id}>"):
+            bot_user_id = get_bot_user_id(web_client).lower()
+            if text.startswith(f"<@{bot_user_id}>") or is_channel_im(
+                channel, web_client
+            ):
                 PARROT.on_app_mention(web_client, text, channel, timestamp, user)
             PARROT.on_message(web_client, text, channel, timestamp, user)
     except slack.errors.SlackApiError as exception:

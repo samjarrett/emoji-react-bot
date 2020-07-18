@@ -24,7 +24,15 @@ def is_user_a_bot(web_client: slack.WebClient, user: str) -> bool:
 
 
 def is_channel_private(channel: str, web_client: slack.WebClient) -> bool:
-    return __cached_is_channel_private(channel, BlackBox(web_client))
+    return __cached_conversations_info(channel, BlackBox(web_client)).get(
+        "is_private", True
+    )
+
+
+def is_channel_im(channel: str, web_client: slack.WebClient) -> bool:
+    return __cached_conversations_info(channel, BlackBox(web_client)).get(
+        "is_im", False
+    )
 
 
 @lru_cache(maxsize=None)
@@ -33,12 +41,8 @@ def __cached_get_bot_user_id(web_client: BlackBox) -> str:
 
 
 @lru_cache(maxsize=None)
-def __cached_is_channel_private(channel: str, web_client: BlackBox) -> str:
-    return (
-        web_client.contents.conversations_info(channel=channel)
-        .get("channel", {})
-        .get("is_private", True)
-    )
+def __cached_conversations_info(channel: str, web_client: BlackBox):
+    return web_client.contents.conversations_info(channel=channel).get("channel", {})
 
 
 @lru_cache(maxsize=None)

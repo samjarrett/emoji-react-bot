@@ -4,7 +4,7 @@ import re
 
 import slack
 
-from .slack_helper import is_user_a_bot
+from .slack_helper import is_user_a_bot, is_channel_im
 
 TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave"}
 
@@ -83,10 +83,24 @@ class Parrot:
                 )
                 break
 
-        if channel == self.debug_channel:
+        if channel == self.debug_channel or is_channel_im(channel, web_client):
             match = re.search(r"parrot \<\@([a-z0-9]+)\>", text)
             if match:
                 self.parrot(web_client, match[1].upper())
+
+            if "parrot status" in text:
+                if self.user:
+                    web_client.chat_postMessage(
+                        channel=channel,
+                        thread_ts=timestamp,
+                        text=f":partyparrot: Currently parroting <@{self.user}>",
+                    )
+                else:
+                    web_client.chat_postMessage(
+                        channel=channel,
+                        thread_ts=timestamp,
+                        text=":pouting_cat: Not parroting anyone right now",
+                    )
 
     def on_reaction_added(
         self,
