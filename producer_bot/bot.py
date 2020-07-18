@@ -87,7 +87,9 @@ def on_message(
             if text.startswith(f"<@{bot_user_id}>") or is_channel_im(
                 channel, web_client
             ):
-                PARROT.on_app_mention(web_client, text, channel, timestamp, user)
+                PARROT.on_app_mention(
+                    web_client, text, channel, data.get("thread_ts", None), user
+                )
             PARROT.on_message(web_client, text, channel, timestamp, user)
     except slack.errors.SlackApiError as exception:
         logging.error(exception)

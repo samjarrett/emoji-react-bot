@@ -30,9 +30,20 @@ class Parrot:
             )
         LOGGER.info(message)
 
-    def parrot(self, web_client: slack.WebClient, user: str):
+    def parrot(
+        self,
+        web_client: slack.WebClient,
+        user: str,
+        nominating_user: Optional[str] = None,
+    ):
         """Parrot a new user"""
-        self.write_log_entry(web_client, f"Now parroting <@{user}>")
+        if nominating_user:
+            self.write_log_entry(
+                web_client,
+                f"Now parroting <@{user}> - nominated by <@{nominating_user}>",
+            )
+        else:
+            self.write_log_entry(web_client, f"Now parroting <@{user}>")
         self.user = user
 
     def on_message(
@@ -57,7 +68,7 @@ class Parrot:
         web_client: slack.WebClient,
         text: str,
         channel: str,
-        timestamp: str,
+        timestamp: Optional[str],
         user: str,
     ):
         """Handle mentions"""
@@ -72,10 +83,11 @@ class Parrot:
                     )
                     return
 
-                self.user = None
                 self.write_log_entry(
-                    web_client, f"No longer parroting <@{user}> :pouting_cat:"
+                    web_client,
+                    f"No longer parroting <@{self.user}> :pouting_cat: (<@{user}> asked me to stop)",
                 )
+                self.user = None
                 web_client.chat_postMessage(
                     channel=channel,
                     thread_ts=timestamp,
@@ -86,19 +98,28 @@ class Parrot:
         if channel == self.debug_channel or is_channel_im(channel, web_client):
             match = re.search(r"parrot \<\@([a-z0-9]+)\>", text)
             if match:
-                self.parrot(web_client, match[1].upper())
+                victim = match[1].upper()
+                self.parrot(web_client, victim, user)
+                web_client.chat_postEphemeral(
+                    channel=channel,
+                    thread_ts=timestamp,
+                    user=user,
+                    text=f":partyparrot: Watch out <@{victim}>, there's a parrot circling you",
+                )
 
             if "parrot status" in text:
                 if self.user:
-                    web_client.chat_postMessage(
+                    web_client.chat_postEphemeral(
                         channel=channel,
                         thread_ts=timestamp,
+                        user=user,
                         text=f":partyparrot: Currently parroting <@{self.user}>",
                     )
                 else:
-                    web_client.chat_postMessage(
+                    web_client.chat_postEphemeral(
                         channel=channel,
                         thread_ts=timestamp,
+                        user=user,
                         text=":pouting_cat: Not parroting anyone right now",
                     )
 
