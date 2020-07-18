@@ -15,6 +15,13 @@ CORRECT_PHRASES = frozenset(
             name="Corrector",
             ephemeral=False,
         ),
+        CorrectablePhrase(
+            match=r"\bbrighton\b",
+            message="> Braaaahton\nFTFY :welcome:",
+            emoji="beach_with_umbrella",
+            name="Corrector",
+            ephemeral=False,
+        ),
     }
 )
 
