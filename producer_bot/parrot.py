@@ -6,7 +6,7 @@ import slack
 
 from .slack_helper import is_user_a_bot, is_channel_im
 
-TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave"}
+TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave", "clap"}
 
 LOGGER = logging.getLogger(__name__)
 
