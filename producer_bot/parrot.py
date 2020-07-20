@@ -7,7 +7,15 @@ import slack
 
 from .slack_helper import is_user_a_bot, is_channel_im
 
-TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave", "clap"}
+TRIGGERED_EMOJI = {
+    "rip",
+    "dumpster-fire",
+    "wave",
+    "clap",
+    "plus1",
+    "surprisedpikachu",
+    "laughing",
+}
 MOCK_FREQUENCY = 7
 TYPING_FREQUENCY = 3
 PARROT_LIMIT = 50
