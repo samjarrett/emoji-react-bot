@@ -46,7 +46,7 @@ def __cached_conversations_info(channel: str, web_client: BlackBox):
 
 
 @lru_cache(maxsize=None)
-def __cached_get_users_info(user: str, web_client: BlackBox) -> str:
+def __cached_get_users_info(user: str, web_client: BlackBox):
     return web_client.contents.users_info(user=user).get("user", {})
 
 

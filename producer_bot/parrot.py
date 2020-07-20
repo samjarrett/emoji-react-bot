@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 import re
 import urllib.parse
+from dataclasses import dataclass
 
 import slack
 
@@ -23,6 +24,14 @@ PARROT_LIMIT = 50
 LOGGER = logging.getLogger(__name__)
 
 
+@dataclass
+class MessageDetails:
+    """Details of a message"""
+
+    channel: str
+    timestamp: str
+
+
 class Parrot:
     """Parrot party troll mode"""
 
@@ -39,7 +48,9 @@ class Parrot:
         """Write a message to the admin channel and log"""
         if self.debug_channel:
             web_client.chat_postMessage(
-                channel=self.debug_channel, text=f":partyparrot: {message}",
+                channel=self.debug_channel,
+                text=f":partyparrot: {message}",
+                unfurl_links=True,
             )
         LOGGER.info(message)
 
@@ -48,15 +59,19 @@ class Parrot:
         web_client: slack.WebClient,
         user: str,
         nominating_user: Optional[str] = None,
+        message_details: Optional[MessageDetails] = None,
     ):
         """Parrot a new user"""
+        message = f"Now parroting <@{user}>"
         if nominating_user:
-            self.write_log_entry(
-                web_client,
-                f"Now parroting <@{user}> - nominated by <@{nominating_user}>",
-            )
-        else:
-            self.write_log_entry(web_client, f"Now parroting <@{user}>")
+            message = f"{message} - nominated by <@{nominating_user}>"
+
+        if message_details:
+            permalink = web_client.chat_getPermalink(
+                channel=message_details.channel, message_ts=message_details.timestamp
+            ).data["permalink"]
+            message = f"{message} ({permalink})"
+        self.write_log_entry(web_client, message)
         self.user = user
         self.message_count = 0
 
@@ -74,7 +89,9 @@ class Parrot:
 
         for emoji in TRIGGERED_EMOJI:
             if f":{emoji}:" in text and user != self.user:
-                self.parrot(web_client, user)
+                self.parrot(
+                    web_client, user, message_details=MessageDetails(channel, timestamp)
+                )
                 return
 
         if user == self.user:
@@ -167,7 +184,9 @@ class Parrot:
 
         for check_emoji in TRIGGERED_EMOJI:
             if emoji == check_emoji and user != self.user:
-                self.parrot(web_client, user)
+                self.parrot(
+                    web_client, user, message_details=MessageDetails(channel, timestamp)
+                )
                 return  # don't parrot the parrot emoji itself
 
         if user != self.user:
