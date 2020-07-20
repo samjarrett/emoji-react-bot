@@ -1,12 +1,16 @@
 import logging
 from typing import Optional
 import re
+import urllib.parse
 
 import slack
 
 from .slack_helper import is_user_a_bot, is_channel_im
 
 TRIGGERED_EMOJI = {"rip", "dumpster-fire", "wave", "clap"}
+MOCK_FREQUENCY = 7
+TYPING_FREQUENCY = 3
+PARROT_LIMIT = 50
 
 LOGGER = logging.getLogger(__name__)
 
@@ -15,6 +19,7 @@ class Parrot:
     """Parrot party troll mode"""
 
     user: Optional[str] = None
+    message_count: int = 0
     debug_channel: Optional[str]
 
     def __init__(self, debug_channel: Optional[str]):
@@ -45,6 +50,7 @@ class Parrot:
         else:
             self.write_log_entry(web_client, f"Now parroting <@{user}>")
         self.user = user
+        self.message_count = 0
 
     def on_message(
         self,
@@ -61,7 +67,22 @@ class Parrot:
         for emoji in TRIGGERED_EMOJI:
             if f":{emoji}:" in text and user != self.user:
                 self.parrot(web_client, user)
-                break
+                return
+
+        if user == self.user:
+            self.message_count += 1
+            if self.message_count % MOCK_FREQUENCY == 0:
+                url = "https://mock.sam.wtf/" + urllib.parse.quote_plus(text)
+                web_client.chat_postMessage(
+                    channel=channel,
+                    thread_ts=timestamp,
+                    blocks=[{"type": "image", "image_url": url, "alt_text": text,}],
+                )
+            if self.message_count >= PARROT_LIMIT:
+                self.write_log_entry(
+                    web_client, f"No longer parroting <@{self.user}> :bongoblob:",
+                )
+                self.user = None
 
     def on_app_mention(
         self,
@@ -167,4 +188,5 @@ class Parrot:
         if user != self.user:
             return
 
-        await rtm_client.typing(channel=channel)
+        if self.message_count % TYPING_FREQUENCY == 0:
+            await rtm_client.typing(channel=channel)
