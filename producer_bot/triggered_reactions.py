@@ -25,6 +25,7 @@ PHRASES = [
     (r"(\btp\b|(toilet|bog)\s?(paper|roll))", ["toilet-paper", "shopping_trolley"],),
     (r"animal crossing", "animal-crossing"),
     (r"\bnook\b", "nook"),
+    (r"\bgood bot\b", "hugging_face"),
 ]
 
 
