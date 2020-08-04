@@ -35,6 +35,10 @@ def is_channel_im(channel: str, web_client: slack.WebClient) -> bool:
     )
 
 
+def channel_name(channel: str, web_client: slack.WebClient) -> bool:
+    return __cached_conversations_info(channel, BlackBox(web_client)).get("name", False)
+
+
 @lru_cache(maxsize=None)
 def __cached_get_bot_user_id(web_client: BlackBox) -> str:
     return web_client.contents.auth_test().get("user_id")

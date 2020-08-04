@@ -4,6 +4,8 @@ import re
 
 from slack import WebClient
 
+from slack_helper import channel_name
+
 RepostablePhrase = namedtuple(
     "RepostablePhrase", "match channel description emoji ephemeral"
 )
@@ -22,6 +24,8 @@ REPOST_PHRASES = frozenset(
 WATCH_EMOJIS: Dict[str, RepostablePhrase] = {
     phrase.emoji: phrase for phrase in REPOST_PHRASES
 }
+
+EXCLUDE_CHANNEL_NAME = r"firehose$"
 
 
 def repost(
@@ -43,6 +47,10 @@ def repost(
 
 
 def trigger(channel: str, timestamp: str, user: str, text: str, web_client: WebClient):
+    name = channel_name(channel, web_client)
+    if re.match(EXCLUDE_CHANNEL_NAME, name):
+        return
+
     for phrase in REPOST_PHRASES:
         if phrase.channel == channel:
             continue  # don't try and repost in the same channel
