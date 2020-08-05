@@ -4,7 +4,7 @@ import re
 
 from slack import WebClient
 
-from slack_helper import channel_name
+from .slack_helper import channel_name
 
 RepostablePhrase = namedtuple(
     "RepostablePhrase", "match channel description emoji ephemeral"
