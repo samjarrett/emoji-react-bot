@@ -48,7 +48,7 @@ def repost(
 
 def trigger(channel: str, timestamp: str, user: str, text: str, web_client: WebClient):
     name = channel_name(channel, web_client)
-    if re.match(EXCLUDE_CHANNEL_NAME, name):
+    if re.search(EXCLUDE_CHANNEL_NAME, name):
         return
 
     for phrase in REPOST_PHRASES:
