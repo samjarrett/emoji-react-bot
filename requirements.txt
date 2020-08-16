@@ -7,8 +7,12 @@
 aiohttp==3.6.2            # via slackclient
 async-timeout==3.0.1      # via aiohttp
 attrs==19.3.0             # via aiohttp
-chardet==3.0.4            # via aiohttp
-idna==2.10                # via yarl
+certifi==2020.6.20        # via requests
+chardet==3.0.4            # via aiohttp, requests
+idna==2.10                # via requests, yarl
 multidict==4.7.6          # via aiohttp, yarl
+requests==2.24.0          # via -r requirements.in
 slackclient==2.8.0        # via -r requirements.in
-yarl==1.4.2               # via aiohttp
+typing-extensions==3.7.4.2  # via yarl
+urllib3==1.25.10          # via requests
+yarl==1.5.1               # via aiohttp
