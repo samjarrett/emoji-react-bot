@@ -26,6 +26,9 @@ PHRASES = [
     (r"animal crossing", "animal-crossing"),
     (r"\bnook\b", "nook"),
     (r"\bgood bot\b", "hugging_face"),
+    (r"\bbad bot\b", "anger"),
+    (r"strong(ly)? ask", "muscle"),
+    (r"d11s", "dandy"),
 ]
 
 
