@@ -11,7 +11,7 @@ certifi==2020.6.20        # via requests
 chardet==3.0.4            # via aiohttp, requests
 idna==2.10                # via requests, yarl
 multidict==4.7.6          # via aiohttp, yarl
-python-dotenv==0.14.0     # via -r requirements.in
+python-dotenv==0.15.0     # via -r requirements.in
 requests==2.24.0          # via -r requirements.in
 slackclient==2.9.3        # via -r requirements.in
 urllib3==1.25.10          # via requests
