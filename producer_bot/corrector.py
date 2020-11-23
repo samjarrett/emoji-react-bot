@@ -22,6 +22,20 @@ CORRECT_PHRASES = frozenset(
             name="Corrector",
             ephemeral=False,
         ),
+        CorrectablePhrase(
+            match=r"\bfriday\b",
+            message="https://www.youtube.com/watch?v=kfVsfOSbJY0&feature=youtu.be",
+            emoji="rebecca",
+            name="RB",
+            ephemeral=False,
+        ),
+        CorrectablePhrase(
+            match=r"\bsaturday\b",
+            message="https://www.youtube.com/watch?v=GVCzdpagXOQ&feature=youtu.be",
+            emoji="rebecca",
+            name="RB",
+            ephemeral=False,
+        ),
     }
 )
 
@@ -44,4 +58,5 @@ def trigger(channel: str, timestamp: int, user: str, text: str, web_client: WebC
                     text=phrase.message,
                     icon_emoji=phrase.emoji,
                     username=phrase.name,
+                    unfurl_links=True,
                 )
