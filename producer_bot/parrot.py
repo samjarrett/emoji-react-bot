@@ -1,3 +1,4 @@
+from random import random
 import logging
 from typing import Optional
 import re
@@ -9,13 +10,17 @@ import slack
 from .slack_helper import is_user_a_bot, is_channel_im
 
 TRIGGERED_EMOJI = {
-    "rip",
-    "dumpster-fire",
-    "wave",
-    "clap",
-    "plus1",
-    "surprisedpikachu",
-    "laughing",
+    "wave": 0.1,
+    "clap": 0.1,
+    "plus1": 0.1,
+    "laughing": 0.1,
+    "robot_face": 0.2,
+    "surprisedpikachu": 0.5,
+    "facepalm": 0.5,
+    "10x": 0.5,
+    "jnbow": 0.8,
+    "rip": 1,
+    "dumpster-fire": 1,
 }
 MOCK_FREQUENCY = 7
 TYPING_FREQUENCY = 3
@@ -87,8 +92,8 @@ class Parrot:
         if is_user_a_bot(web_client, user):
             return
 
-        for emoji in TRIGGERED_EMOJI:
-            if f":{emoji}:" in text and user != self.user:
+        for emoji, chance in TRIGGERED_EMOJI.items():
+            if f":{emoji}:" in text and random() <= chance and user != self.user:
                 self.parrot(
                     web_client, user, message_details=MessageDetails(channel, timestamp)
                 )
@@ -182,8 +187,8 @@ class Parrot:
         if is_user_a_bot(web_client, user):
             return
 
-        for check_emoji in TRIGGERED_EMOJI:
-            if emoji == check_emoji and user != self.user:
+        for check_emoji, chance in TRIGGERED_EMOJI.items():
+            if emoji == check_emoji and random() <= chance and user != self.user:
                 self.parrot(
                     web_client, user, message_details=MessageDetails(channel, timestamp)
                 )
