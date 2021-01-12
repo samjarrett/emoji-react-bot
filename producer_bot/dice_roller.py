@@ -1,6 +1,6 @@
 from random import randint
 
-from slack import WebClient
+from slack_sdk import WebClient
 
 DICE_REACTIONS = [
     "zero",

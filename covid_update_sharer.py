@@ -7,7 +7,7 @@ from pprint import pprint
 
 from dotenv import load_dotenv
 import requests
-import slack
+import slack_sdk
 
 TRACKED_SEARCHES = {
     'from:@VicGovDHHS "Yesterday there were" case reported': "chottie",
@@ -26,12 +26,12 @@ TWITTER_API_TOKEN = os.environ["TWITTER_API_TOKEN"]
 DHHS_CHANNEL = os.environ["DHHS_CHANNEL"]
 
 
-def get_slack_client(token: str) -> slack.WebClient:
+def get_slack_client(token: str) -> slack_sdk.WebClient:
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
 
-    return slack.WebClient(token=token, ssl=ssl_context)
+    return slack_sdk.WebClient(token=token, ssl=ssl_context)
 
 
 def main():

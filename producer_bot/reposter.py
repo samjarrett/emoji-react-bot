@@ -2,7 +2,7 @@ from typing import Dict
 from collections import namedtuple
 import re
 
-from slack import WebClient
+from slack_sdk import WebClient
 
 from .slack_helper import channel_name
 
@@ -29,7 +29,10 @@ EXCLUDE_CHANNEL_NAME = r"firehose$"
 
 
 def repost(
-    channel: str, timestamp: str, phrase: RepostablePhrase, web_client: WebClient,
+    channel: str,
+    timestamp: str,
+    phrase: RepostablePhrase,
+    web_client: WebClient,
 ):
     permalink = web_client.chat_getPermalink(
         channel=channel, message_ts=timestamp
@@ -37,12 +40,15 @@ def repost(
 
     # Copy the message
     posted_message = web_client.chat_postMessage(
-        channel=phrase.channel, text=f":{phrase.emoji}: {permalink}", unfurl_links=True,
+        channel=phrase.channel,
+        text=f":{phrase.emoji}: {permalink}",
+        unfurl_links=True,
     )
 
     # Tell the poster about it
     return web_client.chat_getPermalink(
-        channel=posted_message.data["channel"], message_ts=posted_message.data["ts"],
+        channel=posted_message.data["channel"],
+        message_ts=posted_message.data["ts"],
     ).data["permalink"]
 
 

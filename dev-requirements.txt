@@ -5,9 +5,7 @@
 #    pip-compile dev-requirements.in
 #
 aiohttp==3.7.3
-    # via
-    #   -r requirements.txt
-    #   slackclient
+    # via -r requirements.txt
 appdirs==1.4.4
     # via black
 astroid==2.4.2
@@ -67,7 +65,7 @@ requests==2.25.1
     # via -r requirements.txt
 six==1.15.0
     # via astroid
-slackclient==2.9.3
+slack-sdk==3.1.1
     # via -r requirements.txt
 toml==0.10.2
     # via

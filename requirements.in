@@ -1,3 +1,4 @@
-slackclient
+slack-sdk
+aiohttp
 requests
 python-dotenv

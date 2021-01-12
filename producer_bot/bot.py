@@ -2,7 +2,8 @@ import logging
 import os
 import ssl
 from typing import Dict
-import slack
+import slack_sdk
+from slack_sdk.rtm import RTMClient
 from .slack_helper import (
     event_item_to_reactions_api,
     get_bot_user_id,
@@ -33,21 +34,21 @@ logging.basicConfig(
 )
 
 
-@slack.RTMClient.run_on(event="hello")
+@RTMClient.run_on(event="hello")
 def on_hello(**kwargs):  # pylint: disable=unused-argument
     logging.info("Bot connected to the server")
 
 
-@slack.RTMClient.run_on(event="goodbye")
+@RTMClient.run_on(event="goodbye")
 def on_goodbye(**kwargs):  # pylint: disable=unused-argument
     logging.info(
         "Server requested the bot disconnect - will automatically reconnect shortly"
     )
 
 
-@slack.RTMClient.run_on(event="message")
+@RTMClient.run_on(event="message")
 def on_message(
-    data: Dict, web_client: slack.WebClient, **kwargs
+    data: Dict, web_client: slack_sdk.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     # handle different structure of edited messages correctly
     if data.get("subtype") == "message_replied":
@@ -61,24 +62,24 @@ def on_message(
 
     try:
         triggered_reactions.handle_message(channel, timestamp, text, web_client)
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
     try:
         if user and not is_channel_private(channel, web_client):
             reposter.trigger(channel, timestamp, user, text, web_client)
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
     if "dice" in text:
         try:
             dice_roller.roll(channel, timestamp, web_client)
-        except slack.errors.SlackApiError as exception:
+        except slack_sdk.errors.SlackApiError as exception:
             logging.error(exception)
 
     try:
         corrector.trigger(channel, timestamp, user, text, web_client)
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
     try:
@@ -91,13 +92,13 @@ def on_message(
                     web_client, text, channel, data.get("thread_ts", None), user
                 )
             PARROT.on_message(web_client, text, channel, timestamp, user)
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
 
-@slack.RTMClient.run_on(event="reaction_added")
+@RTMClient.run_on(event="reaction_added")
 def on_reaction_added(
-    data: Dict, web_client: slack.WebClient, **kwargs
+    data: Dict, web_client: slack_sdk.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     if data["reaction"] == BACKTRACK_EMOJI:
         reactions_item, item_type = event_item_to_reactions_api(data["item"])
@@ -129,13 +130,13 @@ def on_reaction_added(
             data["item"]["ts"],
             data["user"],
         )
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
 
-@slack.RTMClient.run_on(event="reaction_removed")
+@RTMClient.run_on(event="reaction_removed")
 def on_reaction_removed(
-    data: Dict, web_client: slack.WebClient, **kwargs
+    data: Dict, web_client: slack_sdk.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     try:
         PARROT.on_reaction_removed(
@@ -145,23 +146,23 @@ def on_reaction_removed(
             data["item"]["ts"],
             data["user"],
         )
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
 
-@slack.RTMClient.run_on(event="user_typing")
+@RTMClient.run_on(event="user_typing")
 async def on_user_typing(
-    data: Dict, rtm_client: slack.RTMClient, **kwargs
+    data: Dict, rtm_client: RTMClient, **kwargs
 ):  # pylint: disable=unused-argument
     try:
         await PARROT.on_user_typing(rtm_client, data["channel"], data["user"])
-    except slack.errors.SlackApiError as exception:
+    except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
 
-@slack.RTMClient.run_on(event="emoji_changed")
+@RTMClient.run_on(event="emoji_changed")
 def on_emoji_changed(
-    data: Dict, web_client: slack.WebClient, **kwargs
+    data: Dict, web_client: slack_sdk.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     if not DEBUG_CHANNEL:
         return
@@ -176,15 +177,16 @@ def on_emoji_changed(
     emojis = ", ".join(emoji_names)
 
     web_client.chat_postMessage(
-        channel=DEBUG_CHANNEL, text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis})",
+        channel=DEBUG_CHANNEL,
+        text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis})",
     )
 
 
-def get_bot(token: str) -> slack.RTMClient:
+def get_bot(token: str) -> RTMClient:
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
 
-    rtm_client = slack.RTMClient(token=token, ssl=ssl_context)
+    rtm_client = RTMClient(token=token, ssl=ssl_context)
 
     return rtm_client

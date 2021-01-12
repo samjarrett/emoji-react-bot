@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Dict
 from functools import lru_cache
-import slack
+import slack_sdk
 from .helpers import BlackBox
 
 
@@ -13,29 +13,29 @@ def event_item_to_reactions_api(item: Dict) -> Dict:
     return reaction, item_type
 
 
-def get_bot_user_id(web_client: slack.WebClient) -> str:
+def get_bot_user_id(web_client: slack_sdk.WebClient) -> str:
     return __cached_get_bot_user_id(BlackBox(web_client))
 
 
-def is_user_a_bot(web_client: slack.WebClient, user: str) -> bool:
+def is_user_a_bot(web_client: slack_sdk.WebClient, user: str) -> bool:
     user_info = __cached_get_users_info(user, BlackBox(web_client))
 
     return user_info.get("is_bot", False)
 
 
-def is_channel_private(channel: str, web_client: slack.WebClient) -> bool:
+def is_channel_private(channel: str, web_client: slack_sdk.WebClient) -> bool:
     return __cached_conversations_info(channel, BlackBox(web_client)).get(
         "is_private", True
     )
 
 
-def is_channel_im(channel: str, web_client: slack.WebClient) -> bool:
+def is_channel_im(channel: str, web_client: slack_sdk.WebClient) -> bool:
     return __cached_conversations_info(channel, BlackBox(web_client)).get(
         "is_im", False
     )
 
 
-def channel_name(channel: str, web_client: slack.WebClient) -> bool:
+def channel_name(channel: str, web_client: slack_sdk.WebClient) -> bool:
     return __cached_conversations_info(channel, BlackBox(web_client)).get("name", False)
 
 
@@ -55,7 +55,7 @@ def __cached_get_users_info(user: str, web_client: BlackBox):
 
 
 def get_bot_reactions(
-    web_client: slack.WebClient, bot_user_id: str, item_type: str, item: Dict
+    web_client: slack_sdk.WebClient, bot_user_id: str, item_type: str, item: Dict
 ):
     reaction_response = web_client.reactions_get(**item)
 

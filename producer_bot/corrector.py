@@ -1,7 +1,7 @@
 from collections import namedtuple
 import re
 
-from slack import WebClient
+from slack_sdk import WebClient
 
 CorrectablePhrase = namedtuple(
     "CorrectablePhrase", "match message emoji name ephemeral"

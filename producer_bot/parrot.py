@@ -5,7 +5,8 @@ import re
 import urllib.parse
 from dataclasses import dataclass
 
-import slack
+from slack_sdk import WebClient
+from slack_sdk.rtm import RTMClient
 
 from .slack_helper import is_user_a_bot, is_channel_im
 
@@ -49,7 +50,7 @@ class Parrot:
         self.user = None
         self.debug_channel = debug_channel
 
-    def write_log_entry(self, web_client: slack.WebClient, message: str):
+    def write_log_entry(self, web_client: WebClient, message: str):
         """Write a message to the admin channel and log"""
         if self.debug_channel:
             web_client.chat_postMessage(
@@ -61,7 +62,7 @@ class Parrot:
 
     def parrot(
         self,
-        web_client: slack.WebClient,
+        web_client: WebClient,
         user: str,
         nominating_user: Optional[str] = None,
         message_details: Optional[MessageDetails] = None,
@@ -82,7 +83,7 @@ class Parrot:
 
     def on_message(
         self,
-        web_client: slack.WebClient,
+        web_client: WebClient,
         text: str,
         channel: str,
         timestamp: str,
@@ -106,17 +107,24 @@ class Parrot:
                 web_client.chat_postMessage(
                     channel=channel,
                     thread_ts=timestamp,
-                    blocks=[{"type": "image", "image_url": url, "alt_text": text,}],
+                    blocks=[
+                        {
+                            "type": "image",
+                            "image_url": url,
+                            "alt_text": text,
+                        }
+                    ],
                 )
             if self.message_count >= PARROT_LIMIT:
                 self.write_log_entry(
-                    web_client, f"No longer parroting <@{self.user}> :bongoblob:",
+                    web_client,
+                    f"No longer parroting <@{self.user}> :bongoblob:",
                 )
                 self.user = None
 
     def on_app_mention(
         self,
-        web_client: slack.WebClient,
+        web_client: WebClient,
         text: str,
         channel: str,
         timestamp: Optional[str],
@@ -176,7 +184,7 @@ class Parrot:
 
     def on_reaction_added(
         self,
-        web_client: slack.WebClient,
+        web_client: WebClient,
         emoji: str,
         channel: str,
         timestamp: str,
@@ -201,7 +209,7 @@ class Parrot:
 
     def on_reaction_removed(
         self,
-        web_client: slack.WebClient,
+        web_client: WebClient,
         emoji: str,
         channel: str,
         timestamp: str,
@@ -213,9 +221,7 @@ class Parrot:
 
         web_client.reactions_remove(name=emoji, channel=channel, timestamp=timestamp)
 
-    async def on_user_typing(
-        self, rtm_client: slack.RTMClient, channel: str, user: str
-    ):
+    async def on_user_typing(self, rtm_client: RTMClient, channel: str, user: str):
         """Handle users typing"""
         if user != self.user:
             return
