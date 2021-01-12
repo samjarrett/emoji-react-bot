@@ -3,15 +3,14 @@ import logging
 import hashlib
 import ssl
 
-from pprint import pprint
-
 from dotenv import load_dotenv
 import requests
 import slack_sdk
 
 TRACKED_SEARCHES = {
-    'from:@VicGovDHHS "Yesterday there were" case reported': "chottie",
-    'from:@NSWHealth "NSW recorded" "COVID-19': "nsw",
+    "from:@VicGovDHHS #EveryTestHelps": "chottie",
+    'from:@NSWHealth "NSW recorded" "COVID-19"': "nsw",
+    'from:@AnnastaciaMP "coronavirus cases in Queensland"': "annastacia",
 }
 
 load_dotenv()
