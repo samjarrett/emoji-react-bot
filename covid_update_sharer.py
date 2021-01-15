@@ -65,14 +65,17 @@ def main():
         data = response.json()
         if data["statuses"]:
             last_id = data["statuses"][0]["id_str"]
-            logging.info(f"Found new {emoji} message with ID: {last_id}")
+            username = data["statuses"][0]["user"]["screen_name"].lower()
+            logging.info(
+                f"Found new {emoji} message from @{username} with ID: {last_id}"
+            )
 
             with open(last_id_filename, "w") as last_id_file:
                 last_id_file.write(last_id)
 
             slack_client.chat_postMessage(
                 channel=DHHS_CHANNEL,
-                text=f":{emoji}: https://twitter.com/vicgovdhhs/status/{last_id}",
+                text=f":{emoji}: https://twitter.com/{username}/status/{last_id}",
                 unfurl_links=True,
                 unfurl_media=True,
             )
