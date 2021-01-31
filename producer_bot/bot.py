@@ -7,13 +7,11 @@ from slack_sdk.rtm import RTMClient
 from .slack_helper import (
     event_item_to_reactions_api,
     get_bot_user_id,
-    is_channel_private,
     is_channel_im,
     get_bot_reactions,
 )
 from . import triggered_reactions
 from . import dice_roller
-from . import reposter
 from . import corrector
 from .parrot import Parrot
 
@@ -65,12 +63,6 @@ def on_message(
     except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
-    try:
-        if user and not is_channel_private(channel, web_client):
-            reposter.trigger(channel, timestamp, user, text, web_client)
-    except slack_sdk.errors.SlackApiError as exception:
-        logging.error(exception)
-
     if "dice" in text:
         try:
             dice_roller.roll(channel, timestamp, web_client)
@@ -108,19 +100,6 @@ def on_reaction_added(
 
         for reaction in bot_reactions:
             web_client.reactions_remove(name=reaction.get("name"), **reactions_item)
-
-    phrase = reposter.WATCH_EMOJIS.get(data["reaction"])
-    if phrase:
-        permalink = reposter.repost(
-            data["item"]["channel"], data["item"]["ts"], phrase, web_client
-        )
-        message = (
-            f":{phrase.emoji}: hey <@{data['user']}>, since your message was about *{phrase.description}*, "
-            f"I went ahead and <{permalink}|reposted it> to <#{phrase.channel}> for you."
-        )
-        web_client.chat_postEphemeral(
-            channel=data["item"]["channel"], user=data["user"], text=message
-        )
 
     try:
         PARROT.on_reaction_added(
