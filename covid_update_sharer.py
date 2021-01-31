@@ -11,6 +11,7 @@ TRACKED_SEARCHES = {
     "from:@vicgovdhhs #COVID19VicData OR #EveryTestHelps": "chottie",
     'from:@NSWHealth "NSW recorded" "COVID-19"': "nsw",
     'from:@AnnastaciaMP "coronavirus cases in Queensland"': "annastacia",
+    'from:@MarkMcGowanMP "This is our WA COVID-19 update"': "perth",
 }
 
 load_dotenv()
