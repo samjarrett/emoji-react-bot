@@ -55,7 +55,7 @@ mypy==0.800
     # via -r dev-requirements.in
 pathspec==0.8.1
     # via black
-pylint==2.6.0
+pylint==2.6.2
     # via -r dev-requirements.in
 python-dotenv==0.15.0
     # via -r requirements.txt
