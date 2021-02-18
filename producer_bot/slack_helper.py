@@ -18,6 +18,10 @@ def get_bot_user_id(web_client: slack_sdk.WebClient) -> str:
 
 
 def is_user_a_bot(web_client: slack_sdk.WebClient, user: str) -> bool:
+    if user == "USLACKBOT":
+        # Slackbot doesn't look like a bot in the API for some reason
+        return True
+
     user_info = __cached_get_users_info(user, BlackBox(web_client))
 
     return user_info.get("is_bot", False)
