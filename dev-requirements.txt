@@ -65,7 +65,7 @@ requests==2.25.1
     # via -r requirements.txt
 six==1.15.0
     # via astroid
-slack-sdk==3.3.2
+slack-sdk==3.4.0
     # via -r requirements.txt
 toml==0.10.2
     # via
