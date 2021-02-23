@@ -9,7 +9,7 @@ import slack_sdk
 
 TRACKED_SEARCHES = {
     "from:@vicgovdh #COVID19VicData OR #EveryTestHelps": "chottie",
-    'from:@NSWHealth "NSW recorded" "COVID-19"': "nsw",
+    'from:@NSWHealth "NSW recorded" cases tests': "nsw",
     'from:@AnnastaciaMP "coronavirus cases in Queensland"': "annastacia",
     'from:@MarkMcGowanMP "This is our WA COVID-19 update"': "perth",
 }
