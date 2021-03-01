@@ -8,7 +8,7 @@ aiohttp==3.7.4
     # via -r requirements.txt
 appdirs==1.4.4
     # via black
-astroid==2.5.0
+astroid==2.5.1
     # via pylint
 async-timeout==3.0.1
     # via
@@ -55,7 +55,7 @@ mypy==0.812
     # via -r dev-requirements.in
 pathspec==0.8.1
     # via black
-pylint==2.7.1
+pylint==2.7.2
     # via -r dev-requirements.in
 python-dotenv==0.15.0
     # via -r requirements.txt
