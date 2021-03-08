@@ -4,7 +4,7 @@
 #
 #    pip-compile dev-requirements.in
 #
-aiohttp==3.7.4
+aiohttp==3.7.4.post0
     # via -r requirements.txt
 appdirs==1.4.4
     # via black
