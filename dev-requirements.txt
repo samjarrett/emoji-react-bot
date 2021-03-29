@@ -57,7 +57,7 @@ pathspec==0.8.1
     # via black
 pylint==2.7.2
     # via -r dev-requirements.in
-python-dotenv==0.15.0
+python-dotenv==0.16.0
     # via -r requirements.txt
 regex==2020.11.13
     # via black
