@@ -24,7 +24,7 @@ multidict==5.1.0
     # via
     #   aiohttp
     #   yarl
-python-dotenv==0.15.0
+python-dotenv==0.16.0
     # via -r requirements.in
 requests==2.25.1
     # via -r requirements.in
