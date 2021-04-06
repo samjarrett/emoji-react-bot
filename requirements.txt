@@ -32,7 +32,7 @@ slack-sdk==3.4.2
     # via -r requirements.in
 typing-extensions==3.7.4.3
     # via aiohttp
-urllib3==1.26.3
+urllib3==1.26.4
     # via requests
 yarl==1.6.3
     # via aiohttp
