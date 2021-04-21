@@ -63,7 +63,7 @@ regex==2020.11.13
     # via black
 requests==2.25.1
     # via -r requirements.txt
-slack-sdk==3.4.2
+slack-sdk==3.5.0
     # via -r requirements.txt
 toml==0.10.2
     # via
