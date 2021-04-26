@@ -18,7 +18,7 @@ attrs==20.3.0
     # via
     #   -r requirements.txt
     #   aiohttp
-black==20.8b1
+black==21.4b0
     # via -r dev-requirements.in
 certifi==2020.12.5
     # via
@@ -70,14 +70,11 @@ toml==0.10.2
     #   black
     #   pylint
 typed-ast==1.4.2
-    # via
-    #   black
-    #   mypy
+    # via mypy
 typing-extensions==3.7.4.3
     # via
     #   -r requirements.txt
     #   aiohttp
-    #   black
     #   mypy
 urllib3==1.26.4
     # via
