@@ -15,8 +15,9 @@ from . import dice_roller
 from . import corrector
 from .parrot import Parrot
 
-DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL")
-ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL")
+DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")
+ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL", "")
+ANNOUNCEMENT_CHANNEL = os.environ.get("ANNOUNCEMENT_CHANNEL", "")
 
 BACKTRACK_EMOJI = "no_entry_sign"
 EMOJI_VERBIAGE = {
@@ -158,6 +159,17 @@ def on_emoji_changed(
     web_client.chat_postMessage(
         channel=DEBUG_CHANNEL,
         text=f":robot_face: Emoji {verb}: `{emojis}` ({emojis})",
+    )
+
+
+@RTMClient.run_on(event="channel_created")
+def on_channel_created(
+    data: Dict, web_client: slack_sdk.WebClient, **kwargs
+):  # pylint: disable=unused-argument
+    web_client.chat_postMessage(
+        channel=ANNOUNCEMENT_CHANNEL,
+        text=f":heavy_plus_sign: #{data['channel']['name']} created by <@{data['channel']['creator']}>",
+        link_names=True,
     )
 
 
