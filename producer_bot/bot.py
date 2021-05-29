@@ -92,9 +92,15 @@ def on_message(
     try:
         if "bot_id" not in data:  # don't trigger on bots
             bot_user_id = get_bot_user_id(web_client).lower()
-            if text.startswith(f"<@{bot_user_id}>"):
+            if text.startswith(f"<@{bot_user_id}>") or is_channel_im(
+                channel, web_client
+            ):
                 vaccination_app_mention(
-                    web_client, text, channel, data.get("thread_ts", None), data.get("ts")
+                    web_client,
+                    text,
+                    channel,
+                    data.get("thread_ts", None),
+                    timestamp,
                 )
     except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
