@@ -2,3 +2,5 @@
 pylint
 black
 mypy
+
+jupyter
