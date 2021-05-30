@@ -8,3 +8,5 @@ Dockerfile
 requirements.in
 .dockerignore
 hooks
+.pip-cache
+.github

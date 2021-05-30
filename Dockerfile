@@ -1,20 +1,15 @@
-FROM python:3.9.5-alpine
-
+FROM python:3.9.5-slim
 
 COPY requirements.txt /app/
+ENV APT_DEPS="libxml2-dev libxslt1-dev"
 RUN set -xe && \
-    apk add --no-cache --virtual .build-deps g++ && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends ${APT_DEPS} && \
     pip install -r /app/requirements.txt && \
-    runDeps="$( \
-            scanelf --needed --nobanner --recursive /usr/local \
-                | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-                | sort -u \
-                | xargs -r apk info --installed \
-                | sort -u \
-        )" && \
-    apk add --no-cache --virtual .run-deps $runDeps && \
-    apk del --quiet .build-deps && \
-    rm -rf /root/.cache/pip && \
+    apt-get purge -y --auto-remove \
+      -o APT::AutoRemove::RecommendsImportant=false \
+      ${APT_DEPS} && \
+    rm -rf /var/lib/apt/lists/* /root/.cache/pip && \
     true
 
 WORKDIR /app
