@@ -1,6 +1,5 @@
 from datetime import date, time
 import ssl
-import locale
 from typing import Optional
 import re
 
@@ -10,7 +9,6 @@ import matplotlib.dates as mdates
 import pandas as pd
 from slack_sdk import WebClient
 
-locale.setlocale(locale.LC_ALL, "")
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
@@ -61,7 +59,7 @@ def plot_cumulative_doses(vaccination_data: pd.DataFrame):
     # Add annotation of the final number
     for key in vaccination_data.keys():
         plt.annotate(
-            "{:n}".format(cumsum[key].max()),
+            "{:,}".format(cumsum[key].max()),
             xy=(1, cumsum[key].max()),
             xytext=(8, 0),
             xycoords=("axes fraction", "data"),
@@ -121,7 +119,7 @@ def plot_daily_doses(vaccination_data: pd.DataFrame, rolling_states: list = ["VI
                 thirty_day_vax[f"{key} {period}-day"][thirty_day_vax.last_valid_index()]
             )
             plt.annotate(
-                "{:n}".format(final_val),
+                "{:,}".format(final_val),
                 xy=(1, final_val),
                 xytext=(8, 0),
                 xycoords=("axes fraction", "data"),
@@ -167,7 +165,7 @@ def on_app_mention(
         )
         message = (
             f"Vaccination data for {period.to_timestamp().strftime('%A, %B %-d, %Y')}: \n"
-            + "\n".join([f" - {key}: {value:n}" for key, value in last_figure.items()])
+            + "\n".join([f" - {key}: {value:,}" for key, value in last_figure.items()])
         )
         web_client.files_upload(
             channels=channel,
@@ -182,7 +180,7 @@ def on_app_mention(
         )
         message = (
             f"Total Vaccinations as of {period.to_timestamp().strftime('%A, %B %-d, %Y')}: \n"
-            + "\n".join([f" - {key}: {value:n}" for key, value in last_figure.items()])
+            + "\n".join([f" - {key}: {value:,}" for key, value in last_figure.items()])
         )
         web_client.files_upload(
             channels=channel,
