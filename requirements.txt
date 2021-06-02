@@ -11,9 +11,7 @@ async-timeout==3.0.1
 attrs==20.3.0
     # via aiohttp
 certifi==2020.12.5
-    # via
-    #   -r requirements.in
-    #   requests
+    # via requests
 chardet==3.0.4
     # via
     #   aiohttp
@@ -62,10 +60,8 @@ six==1.16.0
 slack-sdk==3.5.1
     # via -r requirements.in
 typing-extensions==3.7.4.3
-    # via
-    #   aiohttp
-    #   yarl
-urllib3==1.26.4
+    # via aiohttp
+urllib3==1.26.5
     # via requests
 yarl==1.6.3
     # via aiohttp
