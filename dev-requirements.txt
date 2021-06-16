@@ -242,7 +242,7 @@ six==1.16.0
     #   cycler
     #   jsonschema
     #   python-dateutil
-slack-sdk==3.6.0
+slack-sdk==3.7.0
     # via -r requirements.txt
 terminado==0.10.0
     # via notebook
