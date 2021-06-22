@@ -163,7 +163,7 @@ numpy==1.20.3
     #   pandas
 packaging==20.9
     # via bleach
-pandas==1.2.4
+pandas==1.2.5
     # via -r requirements.txt
 pandocfilters==1.4.3
     # via nbconvert
