@@ -32,7 +32,7 @@ multidict==5.1.0
     # via
     #   aiohttp
     #   yarl
-numpy==1.20.3
+numpy==1.21.0
     # via
     #   -r requirements.in
     #   matplotlib
