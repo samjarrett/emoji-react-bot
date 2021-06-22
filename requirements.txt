@@ -37,7 +37,7 @@ numpy==1.20.3
     #   -r requirements.in
     #   matplotlib
     #   pandas
-pandas==1.2.4
+pandas==1.2.5
     # via -r requirements.in
 pillow==8.2.0
     # via matplotlib
