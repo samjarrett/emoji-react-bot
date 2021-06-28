@@ -12,7 +12,7 @@ TRACKED_SEARCHES = {
     'from:@NSWHealth "NSW recorded" cases': "nsw",
     'from:@qldhealthnews "Queensland #COVID19 update"': "annastacia",
     'from:@MarkMcGowanMP "This is our WA COVID-19 update"': "perth",
-    'from:@minhealthnz "new cases of" "in the community in New Zealand"': "flag-nz",
+    'from:@covid19nz "cases of" "in the community in New Zealand" filter:media': "flag-nz",
 }
 
 load_dotenv()
