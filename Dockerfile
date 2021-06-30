@@ -1,4 +1,4 @@
-FROM python:3.9.5-slim
+FROM python:3.9.6-slim
 
 COPY requirements.txt /app/
 ENV APT_DEPS="libxml2-dev libxslt1-dev"
