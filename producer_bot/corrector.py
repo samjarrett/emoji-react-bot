@@ -36,6 +36,13 @@ CORRECT_PHRASES = frozenset(
             name="RB",
             ephemeral=False,
         ),
+        CorrectablePhrase(
+            match=r"\bnot a race\b",
+            message="https://mock.sam.wtf/it's+not+a+race",
+            emoji="scomo",
+            name="scottyfromdoingnothing",
+            ephemeral=False,
+        ),
     }
 )
 
