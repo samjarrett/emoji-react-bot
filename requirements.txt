@@ -13,9 +13,9 @@ attrs==21.2.0
 certifi==2021.5.30
     # via requests
 chardet==4.0.0
-    # via
-    #   aiohttp
-    #   requests
+    # via aiohttp
+charset-normalizer==2.0.1
+    # via requests
 cycler==0.10.0
     # via matplotlib
 idna==2.10
@@ -51,7 +51,7 @@ python-dotenv==0.18.0
     # via -r requirements.in
 pytz==2021.1
     # via pandas
-requests==2.25.1
+requests==2.26.0
     # via -r requirements.in
 six==1.16.0
     # via
