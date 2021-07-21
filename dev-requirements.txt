@@ -10,7 +10,7 @@ appdirs==1.4.4
     # via black
 argon2-cffi==20.1.0
     # via notebook
-astroid==2.6.2
+astroid==2.6.5
     # via pylint
 async-generator==1.10
     # via nbclient
@@ -203,7 +203,7 @@ pygments==2.9.0
     #   jupyterlab-pygments
     #   nbconvert
     #   qtconsole
-pylint==2.9.3
+pylint==2.9.5
     # via -r dev-requirements.in
 pyparsing==2.4.7
     # via
