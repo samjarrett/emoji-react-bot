@@ -107,6 +107,7 @@ def get_child_posts(post_id: str, user: str):
         return list(
             map(lambda tweet: tweet["id"], data["data"][:-CHILD_TWEET_LIMIT:-1])
         )
+    return []
 
 
 def main():
