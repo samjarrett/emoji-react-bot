@@ -132,12 +132,13 @@ def main():
 
             tweet_text = f":{search['emoji']}: https://twitter.com/{search['user']}/status/{last_id}\n"
 
-            child_posts = [
-                f"https://twitter.com/{search['user']}/status/{post_id}"
-                for post_id in get_child_posts(last_id, search["user"])
-            ]
+            child_posts = get_child_posts(last_id, search["user"])
             if child_posts:
-                tweet_text += "\n".join(child_posts)
+                child_post_urls = [
+                    f"https://twitter.com/{search['user']}/status/{post_id}"
+                    for post_id in child_posts
+                ]
+                tweet_text += "\n".join(child_post_urls)
 
             slack_client.chat_postMessage(
                 channel=POST_CHANNEL,
