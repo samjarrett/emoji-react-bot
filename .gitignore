@@ -2,4 +2,3 @@ venv
 .env
 __pycache__
 VERSION
-id_cache/last-id-*.txt
