@@ -15,6 +15,7 @@ from . import dice_roller
 from . import corrector
 from .parrot import Parrot
 from .vaccinations import on_app_mention as vaccination_app_mention
+from .version import get_version
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")
 ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL", "")
@@ -35,8 +36,14 @@ logging.basicConfig(
 
 
 @RTMClient.run_on(event="hello")
-def on_hello(**kwargs):  # pylint: disable=unused-argument
+def on_hello(
+    web_client: slack_sdk.WebClient, **kwargs
+):  # pylint: disable=unused-argument
     logging.info("Bot connected to the server")
+    web_client.chat_postMessage(
+        channel=ADMIN_DEBUG_CHANNEL,
+        text=f":hello-my-name-is: Bot version {get_version()} connected",
+    )
 
 
 @RTMClient.run_on(event="goodbye")
