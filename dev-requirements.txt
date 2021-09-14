@@ -23,7 +23,7 @@ attrs==21.2.0
     #   jsonschema
 backcall==0.2.0
     # via ipython
-black==21.8b0
+black==21.9b0
     # via -r dev-requirements.in
 bleach==3.3.0
     # via nbconvert
