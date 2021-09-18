@@ -8,7 +8,7 @@ aiohttp==3.7.4.post0
     # via -r requirements.txt
 argon2-cffi==20.1.0
     # via notebook
-astroid==2.7.2
+astroid==2.8.0
     # via pylint
 async-generator==1.10
     # via nbclient
@@ -205,7 +205,7 @@ pygments==2.9.0
     #   jupyterlab-pygments
     #   nbconvert
     #   qtconsole
-pylint==2.10.2
+pylint==2.11.1
     # via -r dev-requirements.in
 pyparsing==2.4.7
     # via
@@ -284,8 +284,10 @@ typing-extensions==3.10.0.0
     # via
     #   -r requirements.txt
     #   aiohttp
+    #   astroid
     #   black
     #   mypy
+    #   pylint
 urllib3==1.26.6
     # via
     #   -r requirements.txt
