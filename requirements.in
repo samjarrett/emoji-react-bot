@@ -2,8 +2,3 @@ slack-sdk
 aiohttp
 requests
 python-dotenv
-
-pandas
-matplotlib
-numpy
-lxml

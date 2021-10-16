@@ -14,7 +14,6 @@ from . import triggered_reactions
 from . import dice_roller
 from . import corrector
 from .parrot import Parrot
-from .vaccinations import on_app_mention as vaccination_app_mention
 from .version import get_version
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")
@@ -93,22 +92,6 @@ def on_message(
                     web_client, text, channel, data.get("thread_ts", None), user
                 )
             PARROT.on_message(web_client, text, channel, timestamp, user)
-    except slack_sdk.errors.SlackApiError as exception:
-        logging.error(exception)
-
-    try:
-        if "bot_id" not in data:  # don't trigger on bots
-            bot_user_id = get_bot_user_id(web_client).lower()
-            if text.startswith(f"<@{bot_user_id}>") or is_channel_im(
-                channel, web_client
-            ):
-                vaccination_app_mention(
-                    web_client,
-                    text,
-                    channel,
-                    data.get("thread_ts", None),
-                    timestamp,
-                )
     except slack_sdk.errors.SlackApiError as exception:
         logging.error(exception)
 
