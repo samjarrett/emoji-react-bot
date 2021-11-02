@@ -19,6 +19,8 @@ DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")
 ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL", "")
 ANNOUNCEMENT_CHANNEL = os.environ.get("ANNOUNCEMENT_CHANNEL", "")
 
+SLACK_API_TOKEN_USER = os.environ.get("SLACK_API_TOKEN_USER")
+
 BACKTRACK_EMOJI = "no_entry_sign"
 EMOJI_VERBIAGE = {
     "add": "added",
@@ -177,6 +179,12 @@ def on_channel_created(
         text=f":heavy_plus_sign: #{data['channel']['name']} created by <@{data['channel']['creator']}>",
         link_names=True,
     )
+
+    if SLACK_API_TOKEN_USER:
+        user_web_client = slack_sdk.WebClient(SLACK_API_TOKEN_USER)
+        user_web_client.conversations_invite(
+            channel=data["channel"]["id"], users=[get_bot_user_id(web_client)]
+        )
 
 
 def get_bot(token: str) -> RTMClient:
