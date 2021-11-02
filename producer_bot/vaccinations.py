@@ -1,11 +1,11 @@
-from datetime import date, time
-import ssl
-from typing import Optional
 import re
+import ssl
+from datetime import date, time
+from typing import Optional
 
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from slack_sdk import WebClient
 

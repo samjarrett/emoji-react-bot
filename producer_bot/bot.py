@@ -4,16 +4,15 @@ import ssl
 from typing import Dict
 import slack_sdk
 from slack_sdk.rtm import RTMClient
+
+from . import corrector, dice_roller, triggered_reactions
+from .parrot import Parrot
 from .slack_helper import (
     event_item_to_reactions_api,
+    get_bot_reactions,
     get_bot_user_id,
     is_channel_im,
-    get_bot_reactions,
 )
-from . import triggered_reactions
-from . import dice_roller
-from . import corrector
-from .parrot import Parrot
 from .version import get_version
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")

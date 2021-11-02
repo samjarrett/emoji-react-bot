@@ -1,14 +1,14 @@
-from random import random
 import logging
-from typing import Optional
 import re
 import urllib.parse
 from dataclasses import dataclass
+from random import random
+from typing import Optional
 
 from slack_sdk import WebClient
 from slack_sdk.rtm import RTMClient
 
-from .slack_helper import is_user_a_bot, is_channel_im
+from .slack_helper import is_channel_im, is_user_a_bot
 
 TRIGGERED_EMOJI = {
     "wave": 0.1,

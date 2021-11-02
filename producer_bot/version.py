@@ -1,5 +1,5 @@
-import os
 import functools
+import os
 
 
 @functools.lru_cache(maxsize=None)

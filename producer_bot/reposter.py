@@ -1,6 +1,6 @@
-from typing import Dict
-from collections import namedtuple
 import re
+from collections import namedtuple
+from typing import Dict
 
 from slack_sdk import WebClient
 

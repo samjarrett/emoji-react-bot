@@ -1,7 +1,9 @@
 from copy import deepcopy
-from typing import Dict
 from functools import lru_cache
+from typing import Dict
+
 import slack_sdk
+
 from .helpers import BlackBox
 
 
