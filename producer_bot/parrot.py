@@ -4,6 +4,7 @@ import urllib.parse
 from dataclasses import dataclass
 from random import random
 from typing import Optional
+from random import choice
 
 from slack_sdk import WebClient
 from slack_sdk.rtm import RTMClient
@@ -26,6 +27,16 @@ TRIGGERED_EMOJI = {
 MOCK_FREQUENCY = 7
 TYPING_FREQUENCY = 3
 PARROT_LIMIT = 50
+
+GREETINGS = [
+    "Hi",
+    "Hello",
+    "Fancy seeing you there,",
+    "What's up",
+    "Woah.",
+    "Yo",
+    "Squark",
+]
 
 LOGGER = logging.getLogger(__name__)
 
@@ -73,6 +84,12 @@ class Parrot:
             message = f"{message} - nominated by <@{nominating_user}>"
 
         if message_details:
+            web_client.chat_postMessage(
+                channel=message_details.channel,
+                thread_ts=message_details.timestamp,
+                text=f"{choice(GREETINGS)} <@{user}> :partyparrot:",
+            )
+
             permalink = web_client.chat_getPermalink(
                 channel=message_details.channel, message_ts=message_details.timestamp
             ).data["permalink"]
