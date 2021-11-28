@@ -13,7 +13,7 @@ from .slack_helper import (
     get_bot_user_id,
     is_channel_im,
 )
-from .version import get_version
+from .version import get_version, get_instance_hash
 
 DEBUG_CHANNEL = os.environ.get("DEBUG_CHANNEL", "")
 ADMIN_DEBUG_CHANNEL = os.environ.get("ADMIN_DEBUG_CHANNEL", "")
@@ -42,7 +42,7 @@ def on_hello(
     logging.info("Bot connected to the server")
     web_client.chat_postMessage(
         channel=ADMIN_DEBUG_CHANNEL,
-        text=f":hello-my-name-is: Bot version {get_version()} connected",
+        text=f":hello-my-name-is: Bot version {get_version()} connected on {get_instance_hash()}",
     )
 
 
