@@ -25,7 +25,7 @@ attrs==21.2.0
     #   jsonschema
 backcall==0.2.0
     # via ipython
-black==21.11b1
+black==21.12b0
     # via -r dev-requirements.in
 bleach==4.1.0
     # via nbconvert
@@ -241,8 +241,6 @@ qtconsole==5.1.1
     # via jupyter
 qtpy==1.11.2
     # via qtconsole
-regex==2021.10.8
-    # via black
 requests==2.26.0
     # via -r requirements.txt
 send2trash==1.8.0
