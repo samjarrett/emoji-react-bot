@@ -2,9 +2,3 @@
 pylint
 black
 mypy
-
-pandas
-matplotlib
-numpy
-lxml
-jupyter
