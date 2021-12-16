@@ -54,7 +54,7 @@ multidict==5.2.0
     #   -r requirements.txt
     #   aiohttp
     #   yarl
-mypy==0.910
+mypy==0.920
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
@@ -75,19 +75,17 @@ requests==2.26.0
 slack-sdk==3.13.0
     # via -r requirements.txt
 toml==0.10.2
-    # via
-    #   mypy
-    #   pylint
+    # via pylint
 tomli==1.2.3
-    # via black
+    # via
+    #   black
+    #   mypy
 typing-extensions==3.10.0.2
     # via
     #   -r requirements.txt
-    #   astroid
     #   async-timeout
     #   black
     #   mypy
-    #   pylint
 urllib3==1.26.7
     # via
     #   -r requirements.txt
