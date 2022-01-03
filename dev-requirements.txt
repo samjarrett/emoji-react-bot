@@ -70,7 +70,7 @@ pylint==2.12.2
     # via -r dev-requirements.in
 python-dotenv==0.19.2
     # via -r requirements.txt
-requests==2.26.0
+requests==2.27.0
     # via -r requirements.txt
 slack-sdk==3.13.0
     # via -r requirements.txt
