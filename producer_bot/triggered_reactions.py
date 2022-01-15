@@ -22,13 +22,17 @@ PHRASES = [
     (r"pizza", "pineapple"),
     (r"complicated", "man-gesturing-no"),
     (r"(honk|g[oe]{2}se)", "honk"),
-    (r"(\btp\b|(toilet|bog)\s?(paper|roll))", ["toilet-paper", "shopping_trolley"],),
+    (
+        r"(\btp\b|(toilet|bog)\s?(paper|roll))",
+        ["toilet-paper", "shopping_trolley"],
+    ),
     (r"animal crossing", "animal-crossing"),
     (r"\bnook\b", "nook"),
     (r"\bgood bot\b", "hugging_face"),
     (r"\bbad bot\b", "anger"),
     (r"strong(ly)? ask", "muscle"),
     (r"d11s", "dandy"),
+    ("sage", "sage"),
 ]
 
 
