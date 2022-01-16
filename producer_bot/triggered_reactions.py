@@ -32,7 +32,7 @@ PHRASES = [
     (r"\bbad bot\b", "anger"),
     (r"strong(ly)? ask", "muscle"),
     (r"d11s", "dandy"),
-    ("sage", "sage"),
+    (r"\bsage\b", "sage"),
 ]
 
 
