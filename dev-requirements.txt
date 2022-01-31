@@ -20,7 +20,7 @@ attrs==21.2.0
     # via
     #   -r requirements.txt
     #   aiohttp
-black==21.12b0
+black==22.1.0
     # via -r dev-requirements.in
 certifi==2021.10.8
     # via
@@ -84,7 +84,6 @@ typing-extensions==3.10.0.2
     # via
     #   -r requirements.txt
     #   async-timeout
-    #   black
     #   mypy
 urllib3==1.26.7
     # via
