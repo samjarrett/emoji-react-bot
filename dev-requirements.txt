@@ -54,7 +54,7 @@ multidict==5.2.0
     #   -r requirements.txt
     #   aiohttp
     #   yarl
-mypy==0.940
+mypy==0.941
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
