@@ -68,7 +68,7 @@ platformdirs==2.4.0
     #   pylint
 pylint==2.12.2
     # via -r dev-requirements.in
-python-dotenv==0.19.2
+python-dotenv==0.20.0
     # via -r requirements.txt
 requests==2.27.1
     # via -r requirements.txt
