@@ -18,6 +18,7 @@ from .slack_helper import (
     get_bot_reactions,
     get_bot_user_id,
     is_channel_im,
+    user_display_name,
 )
 from .version import get_version, get_instance_hash
 from .decorator import start_as_current_span
@@ -95,7 +96,9 @@ def on_message(
 
     span.set_attribute("app.channel", data["channel"])
     span.set_attribute("app.timestamp", data["ts"])
-    span.set_attribute("app.user", data.get("user", ""))
+    span.set_attribute("app.user", user)
+    if user:
+        span.set_attribute("app.user_display_name", user_display_name(web_client, user))
 
     try:
         triggered_reactions.handle_message(channel, timestamp, text, web_client)
@@ -136,6 +139,10 @@ def on_reaction_added(
     span.set_attribute("app.channel", data["item"]["channel"])
     span.set_attribute("app.timestamp", data["item"]["ts"])
     span.set_attribute("app.user", data.get("user", ""))
+    if data.get("user", ""):
+        span.set_attribute(
+            "app.user_display_name", user_display_name(web_client, data.get("user", ""))
+        )
 
     if data["reaction"] == BACKTRACK_EMOJI:
         reactions_item, item_type = event_item_to_reactions_api(data["item"])
@@ -167,6 +174,11 @@ def on_reaction_removed(
     span.set_attribute("app.channel", data["item"]["channel"])
     span.set_attribute("app.timestamp", data["item"]["ts"])
     span.set_attribute("app.user", data.get("user", ""))
+    if data.get("user", ""):
+        span.set_attribute(
+            "app.user_display_name", user_display_name(web_client, data.get("user", ""))
+        )
+
     try:
         PARROT.on_reaction_removed(
             web_client,
@@ -182,10 +194,16 @@ def on_reaction_removed(
 @RTMClient.run_on(event="user_typing")
 @start_as_current_span(tracer=tracer, span_name="on_user_typing")
 async def on_user_typing(
-    data: Dict, rtm_client: RTMClient, span, **kwargs
+    data: Dict, rtm_client: RTMClient, web_client: slack_sdk.WebClient, span, **kwargs
 ):  # pylint: disable=unused-argument
     span.set_attribute("app.channel", data["channel"])
     span.set_attribute("app.user", data.get("user", ""))
+    if data.get("user", ""):
+        span.set_attribute(
+            "app.user_display_name",
+            user_display_name(web_client, data.get("user", "")),
+        )
+
     try:
         await PARROT.on_user_typing(rtm_client, data["channel"], data["user"])
     except slack_sdk.errors.SlackApiError as exception:

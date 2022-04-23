@@ -29,6 +29,16 @@ def is_user_a_bot(web_client: slack_sdk.WebClient, user: str) -> bool:
     return user_info.get("is_bot", False)
 
 
+def user_display_name(web_client: slack_sdk.WebClient, user: str) -> str:
+    if user == "USLACKBOT":
+        # Slackbot doesn't look like a bot in the API for some reason
+        return "Slackbot"
+
+    user_info = __cached_get_users_info(user, BlackBox(web_client))
+
+    return user_info.get("profile", {}).get("display_name", "unknown")
+
+
 def is_channel_private(channel: str, web_client: slack_sdk.WebClient) -> bool:
     return __cached_conversations_info(channel, BlackBox(web_client)).get(
         "is_private", True
