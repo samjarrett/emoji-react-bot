@@ -71,7 +71,7 @@ requests==2.27.1
     # via
     #   -r requirements.in
     #   opentelemetry-exporter-otlp-proto-http
-slack-sdk==3.16.1
+slack-sdk==3.16.2
     # via -r requirements.in
 typing-extensions==4.2.0
     # via opentelemetry-sdk
