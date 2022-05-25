@@ -132,7 +132,7 @@ tomli==2.0.1
     #   black
     #   mypy
     #   pylint
-types-requests==2.27.26
+types-requests==2.27.27
     # via -r dev-requirements.in
 types-urllib3==1.26.14
     # via types-requests
