@@ -68,7 +68,7 @@ multidict==6.0.2
     #   -r requirements.txt
     #   aiohttp
     #   yarl
-mypy==0.950
+mypy==0.960
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
@@ -139,11 +139,8 @@ types-urllib3==1.26.14
 typing-extensions==4.2.0
     # via
     #   -r requirements.txt
-    #   astroid
-    #   black
     #   mypy
     #   opentelemetry-sdk
-    #   pylint
 urllib3==1.26.9
     # via
     #   -r requirements.txt
