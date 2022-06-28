@@ -63,13 +63,11 @@ def on_hello(
     web_client: slack_sdk.WebClient, **kwargs
 ):  # pylint: disable=unused-argument
     logging.info("Bot connected to the server")
-    if not FIRST_CONNECT:
-        return
 
     FIRST_CONNECT = False
     web_client.chat_postMessage(
         channel=ADMIN_DEBUG_CHANNEL,
-        text=f":hello-my-name-is: Bot version {get_version()} connected on {get_instance_hash()}",
+        text=f":hello-my-name-is: Bot version {get_version()} connected on {get_instance_hash()} (first connect: {FIRST_CONNECT})",
     )
 
 
