@@ -64,11 +64,11 @@ def on_hello(
 ):  # pylint: disable=unused-argument
     logging.info("Bot connected to the server")
 
-    FIRST_CONNECT = False
     web_client.chat_postMessage(
         channel=ADMIN_DEBUG_CHANNEL,
         text=f":hello-my-name-is: Bot version {get_version()} connected on {get_instance_hash()} (first connect: {FIRST_CONNECT})",
     )
+    FIRST_CONNECT = False
 
 
 @RTMClient.run_on(event="goodbye")
