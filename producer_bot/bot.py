@@ -6,7 +6,6 @@ import slack_sdk
 from slack_sdk.rtm import RTMClient
 
 from opentelemetry import trace
-from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -51,8 +50,6 @@ processor = BatchSpanProcessor(
 provider.add_span_processor(processor)
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
-
-RequestsInstrumentor().instrument()
 
 logging.basicConfig(
     level=logging.INFO,
