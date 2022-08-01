@@ -24,7 +24,7 @@ TRIGGERED_EMOJI = {
     "rip": 1,
     "dumpster-fire": 1,
 }
-MOCK_FREQUENCY = 7
+MOCK_FREQUENCY = 5
 PARROT_LIMIT = 50
 
 GREETINGS = [
