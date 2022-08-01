@@ -25,7 +25,6 @@ TRIGGERED_EMOJI = {
     "dumpster-fire": 1,
 }
 MOCK_FREQUENCY = 7
-TYPING_FREQUENCY = 3
 PARROT_LIMIT = 50
 
 GREETINGS = [
@@ -243,5 +242,4 @@ class Parrot:
         if user != self.user:
             return
 
-        if self.message_count % TYPING_FREQUENCY == 0:
-            await rtm_client.typing(channel=channel)
+        await rtm_client.typing(channel=channel)
