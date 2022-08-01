@@ -2,3 +2,4 @@ slack-sdk
 aiohttp
 python-dotenv
 opentelemetry-exporter-otlp-proto-http
+protobuf~=3.20
