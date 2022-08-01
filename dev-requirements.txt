@@ -99,7 +99,7 @@ platformdirs==2.5.2
     # via
     #   black
     #   pylint
-protobuf==3.20.1
+protobuf==4.21.4
     # via
     #   -r requirements.txt
     #   googleapis-common-protos
@@ -128,11 +128,8 @@ types-urllib3==1.26.19
 typing-extensions==4.3.0
     # via
     #   -r requirements.txt
-    #   astroid
-    #   black
     #   mypy
     #   opentelemetry-sdk
-    #   pylint
 urllib3==1.26.11
     # via
     #   -r requirements.txt
