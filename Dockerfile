@@ -1,4 +1,4 @@
-FROM python:3.11.0rc1-alpine
+FROM python:3.10-alpine
 
 COPY requirements.txt /app/
 RUN set -xe && \
