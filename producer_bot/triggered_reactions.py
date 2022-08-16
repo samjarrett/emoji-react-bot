@@ -33,6 +33,7 @@ PHRASES = [
     (r"strong(ly)? ask", "muscle"),
     (r"d11s", "dandy"),
     (r"\bsage\b", "sage"),
+    (r"yikes", ["yikes", "plus1"]),
 ]
 
 
