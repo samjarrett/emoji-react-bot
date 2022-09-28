@@ -34,6 +34,7 @@ PHRASES = [
     (r"d11s", "dandy"),
     (r"\bsage\b", "sage"),
     (r"yikes", ["yikes", "plus1"]),
+    (r"clo(ud|wn)formation", "clownformation"),
 ]
 
 
