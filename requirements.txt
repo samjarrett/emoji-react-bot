@@ -14,7 +14,7 @@ attrs==22.1.0
     # via aiohttp
 backoff==1.11.1
     # via opentelemetry-exporter-otlp-proto-http
-certifi==2022.6.15
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.0
     # via
