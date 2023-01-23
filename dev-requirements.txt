@@ -106,7 +106,7 @@ protobuf==4.21.12
     #   opentelemetry-proto
 pylint==2.14.5
     # via -r dev-requirements.in
-python-dotenv==0.21.0
+python-dotenv==0.21.1
     # via -r requirements.txt
 requests==2.28.1
     # via
