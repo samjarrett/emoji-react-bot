@@ -106,7 +106,7 @@ protobuf==4.21.12
     #   -r requirements.txt
     #   googleapis-common-protos
     #   opentelemetry-proto
-pylint==2.16.0
+pylint==2.16.1
     # via -r dev-requirements.in
 python-dotenv==0.21.1
     # via -r requirements.txt
