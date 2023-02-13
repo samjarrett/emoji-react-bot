@@ -10,7 +10,7 @@ aiosignal==1.2.0
     # via
     #   -r requirements.txt
     #   aiohttp
-astroid==2.14.1
+astroid==2.14.2
     # via pylint
 async-timeout==4.0.2
     # via
@@ -106,7 +106,7 @@ protobuf==4.21.12
     #   -r requirements.txt
     #   googleapis-common-protos
     #   opentelemetry-proto
-pylint==2.16.1
+pylint==2.16.2
     # via -r dev-requirements.in
 python-dotenv==0.21.1
     # via -r requirements.txt
