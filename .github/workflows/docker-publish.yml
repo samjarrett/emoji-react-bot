@@ -1,6 +1,9 @@
 name: Docker
 
-on: [push]
+on:
+  push: ~
+  schedule:
+    - cron:  '0 17 * * *'
 
 env:
   REGISTRY: ghcr.io
