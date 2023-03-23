@@ -1,5 +1,7 @@
 FROM python:3.10.10-alpine
 
+LABEL org.opencontainers.image.source https://github.com/samjarrett/emoji-react-bot
+
 COPY requirements.txt /app/
 RUN set -xe && \
     apk add --no-cache --virtual .build-deps g++ && \
