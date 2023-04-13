@@ -101,7 +101,7 @@ platformdirs==2.5.2
     # via
     #   black
     #   pylint
-protobuf==4.22.1
+protobuf==4.22.3
     # via
     #   -r requirements.txt
     #   googleapis-common-protos
