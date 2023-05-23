@@ -55,7 +55,7 @@ protobuf==4.23.1
     #   opentelemetry-proto
 python-dotenv==1.0.0
     # via -r requirements.in
-requests==2.28.1
+requests==2.31.0
     # via opentelemetry-exporter-otlp-proto-http
 slack-sdk==3.21.3
     # via -r requirements.in
