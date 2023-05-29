@@ -147,7 +147,7 @@ class Parrot:
         user: str,
     ):
         """Handle mentions"""
-        phrases = {"quit it", "cut it out", "cut that out", "stop it", "enough"}
+        phrases = {"no!", "cut it out", "cut that out", "stop it", "enough!"}
         for phrase in phrases:
             if phrase in text:
                 if not self.user:
