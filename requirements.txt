@@ -58,7 +58,7 @@ opentelemetry-sdk==1.20.0
     # via opentelemetry-exporter-otlp-proto-http
 opentelemetry-semantic-conventions==0.41b0
     # via opentelemetry-sdk
-protobuf==4.24.2
+protobuf==4.24.3
     # via
     #   -r requirements.in
     #   googleapis-common-protos
