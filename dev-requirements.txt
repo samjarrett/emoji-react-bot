@@ -129,10 +129,8 @@ slack-sdk==3.22.0
     # via -r requirements.txt
 tomlkit==0.12.1
     # via pylint
-types-requests==2.31.0.6
+types-requests==2.31.0.7
     # via -r dev-requirements.in
-types-urllib3==1.26.25.14
-    # via types-requests
 typing-extensions==4.7.1
     # via
     #   -r requirements.txt
@@ -142,6 +140,7 @@ urllib3==2.0.4
     # via
     #   -r requirements.txt
     #   requests
+    #   types-requests
 wrapt==1.15.0
     # via
     #   -r requirements.txt
