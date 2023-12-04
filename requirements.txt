@@ -62,7 +62,7 @@ python-dotenv==1.0.0
     # via -r requirements.in
 requests==2.31.0
     # via opentelemetry-exporter-otlp-proto-http
-slack-sdk==3.26.0
+slack-sdk==3.26.1
     # via -r requirements.in
 typing-extensions==4.7.1
     # via opentelemetry-sdk
