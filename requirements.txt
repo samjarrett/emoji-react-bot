@@ -58,7 +58,7 @@ protobuf==4.24.3
     # via
     #   googleapis-common-protos
     #   opentelemetry-proto
-python-dotenv==1.0.0
+python-dotenv==1.0.1
     # via -r requirements.in
 requests==2.31.0
     # via opentelemetry-exporter-otlp-proto-http
